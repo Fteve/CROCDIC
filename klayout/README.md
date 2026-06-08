@@ -1,4 +1,4 @@
-# How to run DRC with KLayout 
+# How to run DRC with KLayout
 
 Note: you can change the tools version by specifying it to the `oseda` command (no arguments == latest release). For checking DRCs with KLayout, use `oseda -2026.04` (current default) or later for a significantly improved runtime with respect to previous versions.
 

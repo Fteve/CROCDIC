@@ -21,7 +21,20 @@ module crocdic_top #(
   // Memory-Mapped IO Addresses (always increment in steps of 4 because 32-bit addresses adress 4 bytes at a time)
   localparam logic [ObiCfg.AddrWidth-1:0] STUDENT_NAMES = croc_pkg::UserBaseAddr; // TODO:  Further, the chip must have a way to output the names of the students in the group. The default way that will be checked automatically is to read from the 0x2000_0000 address (i.e. the start of Croc's user domain) and expect a zero terminated string.  
   localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_START = croc_pkg::UserBaseAddr + 'h4;
-  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_DONE  = croc_pkg::UserBaseAddr + 'h8;
+  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_OPERATION = croc_pkg::UserBaseAddr + 'h8;
+  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_SOURCE_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'hC;
+  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_NR_OF_ELEMENTS = croc_pkg::UserBaseAddr + 'h10;
+  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_DESTINATION_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'h14;
+  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_DONE  = croc_pkg::UserBaseAddr + 'h18;
+
+  typedef enum logic [2:0] {
+    SIN          = 0,
+    COS          = 1,
+    ATAN         = 2,
+    SQRT         = 3,
+    RECIPROCAL   = 4,
+    INVERSE_SQRT = 5
+  } operation_t;
 
 
   // OBI Slave
@@ -67,8 +80,9 @@ module crocdic_top #(
 
   typedef enum logic [7:0] {
     IDLE, 
-    ACTIVE, 
-    WAIT, 
+    CALCULATION_1, 
+    CALCULATION_2, 
+    CALCULATION_3, 
     DONE
   } state_t;
 
@@ -76,23 +90,71 @@ module crocdic_top #(
 
   `FF(state_q, state_d, IDLE);
 
+  // Registers to hold data coming from the CPU (Register File)
+  operation_t operation_d, operation_q;
+  logic [ObiCfg.AddrWidth-1:0] source_array_address_d, source_array_address_q;
+  logic [ObiCfg.AddrWidth-1:0] number_of_elements_d, number_of_elements_q;
+  logic [ObiCfg.AddrWidth-1:0] destination_array_address_d, destination_array_address_q;
+
+  `FF(operation_q, operation_d, SIN);
+  `FF(source_array_address_q, source_array_address_d, '0);
+  `FF(number_of_elements_q, number_of_elements_d, '0);
+  `FF(destination_array_address_q, destination_array_address_d, '0);
+ 
   always_comb begin
     // Default assignments
     rsp_data = '0;
     rsp_err = '0;
     state_d = state_q;
+    operation_d = operation_q;
+    source_array_address_d = source_array_address_q;
+    number_of_elements_d = number_of_elements_q;
+    destination_array_address_d = destination_array_address_q;
 
     case(state_q)
       IDLE: begin
         if (req_q && addr_q == CROCDIC_START) begin
           if (we_q) begin
-            state_d = ACTIVE;
+            state_d = CALCULATION_1;
+          end else begin
+            rsp_err = '1;
+          end
+        end else if (req_q && addr_q == CROCDIC_OPERATION) begin
+          if (we_q) begin
+            operation_d = operation_t'(wdata_q);
+          end else begin
+            rsp_err = '1;
+          end
+        end else if (req_q && addr_q == CROCDIC_SOURCE_ARRAY_ADDRESS) begin
+          if (we_q) begin
+            source_array_address_d = wdata_q;
+          end else begin
+            rsp_err = '1;
+          end
+        end else if (req_q && addr_q == CROCDIC_NR_OF_ELEMENTS) begin
+          if (we_q) begin
+            number_of_elements_d = wdata_q;
+          end else begin
+            rsp_err = '1;
+          end
+        end else if (req_q && addr_q == CROCDIC_DESTINATION_ARRAY_ADDRESS) begin
+          if (we_q) begin
+            destination_array_address_d = wdata_q;
           end else begin
             rsp_err = '1;
           end
         end
       end
-      ACTIVE: begin
+      CALCULATION_1: begin
+        state_d = CALCULATION_2;
+      end
+      CALCULATION_2: begin
+        state_d = CALCULATION_3;
+      end
+      CALCULATION_3: begin
+        state_d = DONE;
+      end
+      DONE: begin
         if (req_q && addr_q == CROCDIC_DONE) begin
           if (we_q) begin
             rsp_err = '1;

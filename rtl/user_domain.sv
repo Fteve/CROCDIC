@@ -110,16 +110,13 @@ module user_domain import user_pkg::*; import croc_pkg::*; #(
   ///////////////////////////////////
   // Replace this with your Design //
   ///////////////////////////////////
-  obi_err_sbr #(
+  crocdic_top #(
     .ObiCfg      ( SbrObiCfg     ),
     .obi_req_t   ( sbr_obi_req_t ),
-    .obi_rsp_t   ( sbr_obi_rsp_t ),
-    .NumMaxTrans ( 1             ),
-    .RspData     ( 32'hBADCAB1E  )
-  ) i_your_design_goes_here (
+    .obi_rsp_t   ( sbr_obi_rsp_t )
+  ) i_crocdic_top (
     .clk_i,
     .rst_ni,
-    .testmode_i ( testmode_i          ),
     .obi_req_i  ( user_design_obi_req ),
     .obi_rsp_o  ( user_design_obi_rsp )
   );

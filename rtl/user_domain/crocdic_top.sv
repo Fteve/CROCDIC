@@ -25,7 +25,8 @@ module crocdic_top #(
   localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_SOURCE_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'hC;
   localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_NR_OF_ELEMENTS = croc_pkg::UserBaseAddr + 'h10;
   localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_DESTINATION_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'h14;
-  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_DONE  = croc_pkg::UserBaseAddr + 'h18;
+  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_DONE  = croc_pkg::UserBaseAddr + 'h26;
+  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_READ  = croc_pkg::UserBaseAddr + 'h30;
 
   typedef enum logic [2:0] {
     SIN          = 0,
@@ -142,6 +143,12 @@ module crocdic_top #(
             destination_array_address_d = wdata_q;
           end else begin
             rsp_err = '1;
+          end
+        end else if (req_q && addr_q == CROCDIC_READ) begin
+          if (we_q) begin
+            rsp_err = '1;
+          end else begin
+            rsp_data = destination_array_address_q;
           end
         end
       end

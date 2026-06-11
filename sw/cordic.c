@@ -13,7 +13,7 @@
 //           Description of the universal CORDIC algorithm is finalized.
 // 
 // #include <stdio.h>
-#include <math.h>
+// #include <math.h>
 
 #include "uart.h"
 #include "print.h"
@@ -21,13 +21,13 @@
 #include "gpio.h"
 #include "util.h"
 
-#define CROCDIC_START 0x20000004UL
-#define CROCDIC_OPERATION 0x20000008UL
-#define CROCDIC_SOURCE_ARRAY_ADDRESS 0x2000000CUL
-#define CROCDIC_NR_OF_ELEMENTS 0x20000010UL
-#define CROCDIC_DESTINATION_ARRAY_ADDRESS 0x20000014UL
-#define CROCDIC_DONE 0x20000026UL
-#define CROCDIC_READ 0x20000030UL
+// #define CROCDIC_START 0x20000004UL
+// #define CROCDIC_OPERATION 0x20000008UL
+// #define CROCDIC_SOURCE_ARRAY_ADDRESS 0x2000000CUL
+// #define CROCDIC_NR_OF_ELEMENTS 0x20000010UL
+// #define CROCDIC_DESTINATION_ARRAY_ADDRESS 0x20000014UL
+// #define CROCDIC_DONE 0x20000020UL
+// #define CROCDIC_READ 0x20000024UL
 
 
 #define ROTATION   0
@@ -50,6 +50,7 @@ typedef short int integer; // work with 16-bit numbers
 
 integer source_array[1] = {23};
 integer destination_array[3] = {0};
+ int length = sizeof(source_array) / sizeof(source_array[0]);
 
 //Cordic in 16 bit signed fixed point math
 //Function is valid for arguments in range -pi/2 -- pi/2
@@ -126,30 +127,30 @@ int main(int argc, char **argv)
   integer result_sw_CORDIC_cos[1] = {0};
   integer result_sw_CORDIC_sin[1] = {0};
 
-  t0 = get_mcycle();
+  // t0 = get_mcycle();
 
 
-  for (int i = 0; i < sizeof(source_array); i++) {
-    result_sw_sin[i] = sin(source_array[i]);
-    result_sw_cos[i] = cos(source_array[i]);
-  }
+  // for (int i = 0; i < sizeof(source_array); i++) {
+  //   result_sw_sin[1] = sin(source_array[1]);
+  //   result_sw_cos[1] = cos(source_array[1]);
+  // }
 
   t1 = get_mcycle();
 
-  *(volatile uint32_t *)CROCDIC_OPERATION = SIN;
-  *(volatile uint32_t *)CROCDIC_SOURCE_ARRAY_ADDRESS = (uint32_t)source_array;
-  *(volatile uint32_t *)CROCDIC_NR_OF_ELEMENTS = 8;
-  *(volatile uint32_t *)CROCDIC_DESTINATION_ARRAY_ADDRESS = (uint32_t)destination_array;
+  // *(volatile uint32_t *)CROCDIC_OPERATION = SIN;
+  // *(volatile uint32_t *)CROCDIC_SOURCE_ARRAY_ADDRESS = (uint32_t)source_array;
+  // *(volatile uint32_t *)CROCDIC_NR_OF_ELEMENTS = 8;
+  // *(volatile uint32_t *)CROCDIC_DESTINATION_ARRAY_ADDRESS = (uint32_t)destination_array;
 
   // // start crocdic_top by writing something to the start_address
   // *(volatile uint32_t *)CROCDIC_START = 0xDEADBEEF;
 
 
   double p;
-  integer x1, y1, z1, i, temp;   
-  integer* x2 = CROCDIC_DESTINATION_ARRAY_ADDRESS + 0x0;
-  integer* y2 = CROCDIC_DESTINATION_ARRAY_ADDRESS + 0x4;
-  integer* z2 = CROCDIC_DESTINATION_ARRAY_ADDRESS + 0x8;
+  integer x1, y1, z1, x2, y2, z2, i, temp;   
+  // integer* x2 = (integer *)CROCDIC_DESTINATION_ARRAY_ADDRESS + 0x0;
+  // integer* y2 = (integer *)CROCDIC_DESTINATION_ARRAY_ADDRESS + 0x4;
+  // integer* z2 = (integer *)CROCDIC_DESTINATION_ARRAY_ADDRESS + 0x8;
   integer w1;
 
   // ROTATION, SIN/COS
@@ -174,17 +175,20 @@ int main(int argc, char **argv)
 // #endif    
 //   }       
 
-  for (i = 0; i < sizeof(source_array); i++) {
-    z1 = (integer)(source_array[i] * MUL); //target angle, multiplied by cosine constant term
-    cordic(gdirection, gmode, x1, y1, z1, x2, y2, z2);
+  for (i = 0; i < length; i++) {
+    z1 = (integer)(source_array[1] * MUL); //target angle, multiplied by cosine constant term
+    cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
+    // result_sw_CORDIC_cos[i] = *reg32(USER_ROM_BASE_ADDR, 0x24);
+    // result_sw_CORDIC_sin[i] = *reg32(USER_ROM_BASE_ADDR, 0x24);
+    result_sw_CORDIC_cos[i] = x2;
+    result_sw_CORDIC_sin[i] = y2;
   }
-  result_sw_CORDIC_cos = *reg32(CROCDIC_DESTINATION_ARRAY_ADDRESS, 0x30);
-  result_sw_CORDIC_sin = *reg32(CROCDIC_DESTINATION_ARRAY_ADDRESS, 0x30);
+
 
   t2 = get_mcycle();
 
-  printf("Software result:\n cos: %x\n sin: %x\n (0x%x cycles)\n", result_sw_cos, result_sw_sin, t1-t0);
-  printf("Hardware result:\n cos: %x\n sin: %n\n (0x%x cycles)\n", result_sw__CORDIC_cos, result_hw_CORDIC_sin, t2-t1);
+  // printf("Software result:\n cos: %x\n sin: %x\n (0x%x cycles)\n", result_sw_cos, result_sw_sin, t1-t0);
+  printf("CORDIC result:\n cos: %x\n sin: %n\n (0x%x cycles)\n", result_sw_CORDIC_cos, result_sw_CORDIC_sin, t2-t1);
 
   uart_write_flush();
 

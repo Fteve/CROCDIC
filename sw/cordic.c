@@ -65,7 +65,8 @@ integer destination_array[3] = {0};
 #define cordic_1K 9949
 #define cordic_1Kp 19783
 #define half_pi 25735
-#define MUL 16384.000000
+//#define MUL 16384.000000
+#define MUL 16384
 #define CORDIC_NTAB 14
 
 integer cordic_tab[3*CORDIC_NTAB] = {
@@ -146,7 +147,7 @@ int main(int argc, char **argv)
   // *(volatile uint32_t *)CROCDIC_START = 0xDEADBEEF;
 
 
-  double p;
+  //double p;
   integer x1, y1, z1, x2, y2, z2, i, temp;   
   // integer* x2 = (integer *)CROCDIC_DESTINATION_ARRAY_ADDRESS + 0x0;
   // integer* y2 = (integer *)CROCDIC_DESTINATION_ARRAY_ADDRESS + 0x4;
@@ -188,7 +189,7 @@ int main(int argc, char **argv)
   t2 = get_mcycle();
 
   // printf("Software result:\n cos: %x\n sin: %x\n (0x%x cycles)\n", result_sw_cos, result_sw_sin, t1-t0);
-  printf("CORDIC result:\n cos: %x\n sin: %n\n (0x%x cycles)\n", result_sw_CORDIC_cos, result_sw_CORDIC_sin, t2-t1);
+  printf("CORDIC result:\n cos: %x\n sin: %x\n (0x%x cycles)\n", result_sw_CORDIC_cos, result_sw_CORDIC_sin, t2-t1);
 
   uart_write_flush();
 

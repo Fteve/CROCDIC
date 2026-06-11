@@ -1,4 +1,4 @@
-#include <math.h>
+//#include <math.h>
 
 #include "uart.h"
 #include "print.h"
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     t0 = get_mcycle();
 
     // result_sw_sin[1] = sin(source_array[1]);
-    result_sw_cos[1] = cos(source_array[1]);
+    //result_sw_cos[1] = cos(source_array[1]);
 
     // result_sw_sin[1] = source_array[1] + source_array[1];
     // result_sw_cos[1] = source_array[1] + source_array[1];

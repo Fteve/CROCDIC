@@ -32,7 +32,7 @@ module user_domain import user_pkg::*; import croc_pkg::*; #(
   /////////////////////
 
   // No manager so we don't need a obi_mux module and just terminate the request properly
-  assign user_mgr_obi_req_o = '0;
+  //assign user_mgr_obi_req_o = '0;
 
 
   ////////////////////////////
@@ -111,14 +111,19 @@ module user_domain import user_pkg::*; import croc_pkg::*; #(
   // Replace this with your Design //
   ///////////////////////////////////
   crocdic_top #(
-    .ObiCfg      ( SbrObiCfg     ),
-    .obi_req_t   ( sbr_obi_req_t ),
-    .obi_rsp_t   ( sbr_obi_rsp_t )
+    .SbrObiCfg      ( SbrObiCfg     ),
+    .MgrObiCfg      ( MgrObiCfg     ),
+    .sbr_obi_req_t   ( sbr_obi_req_t ),
+    .sbr_obi_rsp_t   ( sbr_obi_rsp_t ),
+    .mgr_obi_req_t   ( mgr_obi_req_t ),
+    .mgr_obi_rsp_t   ( mgr_obi_rsp_t )
   ) i_crocdic_top (
     .clk_i,
     .rst_ni,
-    .obi_req_i  ( user_design_obi_req ),
-    .obi_rsp_o  ( user_design_obi_rsp )
+    .sbr_obi_req_i  ( user_design_obi_req ),
+    .sbr_obi_rsp_o  ( user_design_obi_rsp ),
+    .mgr_obi_req_o  ( user_mgr_obi_req_o ),
+    .mgr_obi_rsp_i  ( user_mgr_obi_rsp_i )
   );
 
   // Error Subordinate

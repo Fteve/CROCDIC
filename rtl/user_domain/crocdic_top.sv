@@ -1,12 +1,18 @@
 `include "common_cells/registers.svh"
 
 module crocdic_top #(
-  // The OBI configuration for all ports.
-  parameter obi_pkg::obi_cfg_t           ObiCfg      = obi_pkg::ObiDefaultConfig,
-  // The request struct.
-  parameter type                         obi_req_t   = logic,
-  // The response struct.
-  parameter type                         obi_rsp_t   = logic
+  // Slave: The OBI configuration for all ports.
+  parameter obi_pkg::obi_cfg_t           SbrObiCfg      = obi_pkg::ObiDefaultConfig,
+  // Master: The OBI configuration for all ports.
+  parameter obi_pkg::obi_cfg_t           MgrObiCfg      = obi_pkg::ObiDefaultConfig,
+  // The request struct for the slave.
+  parameter type                         sbr_obi_req_t   = logic,
+  // The response struct for the slave.
+  parameter type                         sbr_obi_rsp_t   = logic,
+  // The request struct for the master.
+  parameter type                         mgr_obi_req_t   = logic,
+  // The response struct for the master.
+  parameter type                         mgr_obi_rsp_t   = logic
 ) (
   // Clock
   input  logic clk_i,
@@ -14,18 +20,22 @@ module crocdic_top #(
   input  logic rst_ni,
 
   // OBI request interface (Slave)
-  input  obi_req_t obi_req_i,
+  input  sbr_obi_req_t sbr_obi_req_i,
   // OBI response interface (Slave)
-  output obi_rsp_t obi_rsp_o
+  output sbr_obi_rsp_t sbr_obi_rsp_o,
+  // OBI request interface (Master)
+  output mgr_obi_req_t mgr_obi_req_o,
+  // OBI response interface (Master)
+  input  mgr_obi_rsp_t mgr_obi_rsp_i
 );
   // Memory-Mapped IO Addresses (always increment in steps of 4 because 32-bit addresses adress 4 bytes at a time)
-  localparam logic [ObiCfg.AddrWidth-1:0] STUDENT_NAMES = croc_pkg::UserBaseAddr; // TODO:  Further, the chip must have a way to output the names of the students in the group. The default way that will be checked automatically is to read from the 0x2000_0000 address (i.e. the start of Croc's user domain) and expect a zero terminated string.  
-  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_START = croc_pkg::UserBaseAddr + 'h4;
-  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_OPERATION = croc_pkg::UserBaseAddr + 'h8;
-  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_SOURCE_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'hC;
-  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_NR_OF_ELEMENTS = croc_pkg::UserBaseAddr + 'h10;
-  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_DESTINATION_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'h14;
-  localparam logic [ObiCfg.AddrWidth-1:0] CROCDIC_DONE  = croc_pkg::UserBaseAddr + 'h18;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] STUDENT_NAMES = croc_pkg::UserBaseAddr; // TODO:  Further, the chip must have a way to output the names of the students in the group. The default way that will be checked automatically is to read from the 0x2000_0000 address (i.e. the start of Croc's user domain) and expect a zero terminated string.  
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_START = croc_pkg::UserBaseAddr + 'h4;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_OPERATION = croc_pkg::UserBaseAddr + 'h8;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_SOURCE_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'hC;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_NR_OF_ELEMENTS = croc_pkg::UserBaseAddr + 'h10;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_DESTINATION_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'h14;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_DONE  = croc_pkg::UserBaseAddr + 'h18;
 
   typedef enum logic [2:0] {
     SIN          = 0,
@@ -40,39 +50,83 @@ module crocdic_top #(
   // OBI Slave
 
   // Define registers to hold the inputs received from the OBI request interface (slave)
-  logic req_d, req_q;
-  logic we_d, we_q;
-  logic [ObiCfg.AddrWidth-1:0] addr_d, addr_q;
-  logic [ObiCfg.IdWidth-1:0] id_d, id_q;
-  logic [ObiCfg.DataWidth-1:0] wdata_d, wdata_q;
+  logic sbr_req_d, sbr_req_q;
+  logic sbr_we_d, sbr_we_q;
+  logic [SbrObiCfg.AddrWidth-1:0] sbr_addr_d, sbr_addr_q;
+  logic [SbrObiCfg.IdWidth-1:0] sbr_id_d, sbr_id_q;
+  logic [SbrObiCfg.DataWidth-1:0] sbr_wdata_d, sbr_wdata_q;
 
   // Signals used to create the response (slave)
-  logic [ObiCfg.DataWidth-1:0] rsp_data;  // Data field of the OBI response
-  logic rsp_err;  // Error field of the OBI reponse
+  logic [SbrObiCfg.DataWidth-1:0] sbr_rsp_data;  // Data field of the OBI response
+  logic sbr_rsp_err;  // Error field of the OBI reponse
 
   // Note to avoid writing trivial always_ff statements we can use this macro defined in registers.svh 
-  `FF(req_q, req_d, '0);
-  `FF(id_q , id_d , '0);
-  `FF(we_q , we_d , '0);
-  `FF(wdata_q , wdata_d , '0);
-  `FF(addr_q , addr_d , '0);
+  `FF(sbr_req_q, sbr_req_d, '0);
+  `FF(sbr_id_q , sbr_id_d , '0);
+  `FF(sbr_we_q , sbr_we_d , '0);
+  `FF(sbr_wdata_q , sbr_wdata_d , '0);
+  `FF(sbr_addr_q , sbr_addr_d , '0);
 
   // Wire the request (slave)
-  assign req_d = obi_req_i.req;
-  assign id_d = obi_req_i.a.aid;
-  assign we_d = obi_req_i.a.we;
-  assign addr_d = obi_req_i.a.addr;
-  assign wdata_d = obi_req_i.a.wdata;
+  assign sbr_req_d = sbr_obi_req_i.req;
+  assign sbr_id_d = sbr_obi_req_i.a.aid;
+  assign sbr_we_d = sbr_obi_req_i.a.we;
+  assign sbr_addr_d = sbr_obi_req_i.a.addr;
+  assign sbr_wdata_d = sbr_obi_req_i.a.wdata;
 
   // Wire the response (slave)
   // A channel
-  assign obi_rsp_o.gnt = obi_req_i.req;
+  assign sbr_obi_rsp_o.gnt = sbr_obi_req_i.req;
   // R channel:
-  assign obi_rsp_o.rvalid = req_q;
-  assign obi_rsp_o.r.rdata = rsp_data;
-  assign obi_rsp_o.r.rid = id_q;
-  assign obi_rsp_o.r.err = rsp_err;
-  assign obi_rsp_o.r.r_optional = '0;
+  assign sbr_obi_rsp_o.rvalid = sbr_req_q;
+  assign sbr_obi_rsp_o.r.rdata = sbr_rsp_data;
+  assign sbr_obi_rsp_o.r.rid = sbr_id_q;
+  assign sbr_obi_rsp_o.r.err = sbr_rsp_err;
+  assign sbr_obi_rsp_o.r.r_optional = '0;
+
+
+  // OBI Master
+
+  // Define registers to hold the inputs received from the OBI response interface (master)
+  logic mgr_gnt_d, mgr_gnt_q;
+  logic mgr_rvalid_d, mgr_rvalid_q;
+  logic [MgrObiCfg.DataWidth-1:0] mgr_rdata_d, mgr_rdata_q;
+  logic [MgrObiCfg.IdWidth-1:0] mgr_rid_d, mgr_rid_q;
+  logic mgr_err_d, mgr_err_q;
+  // don't care about r_optional: not used
+
+  // Signals used to create the request (master)
+  logic mgr_req;
+  logic [MgrObiCfg.AddrWidth-1:0] mgr_addr;
+  logic mgr_we;
+  logic [MgrObiCfg.DataWidth/8-1:0] mgr_be;
+  logic [MgrObiCfg.DataWidth-1:0] mgr_wdata;
+  logic [MgrObiCfg.IdWidth-1:0] mgr_aid;
+  // dont care about a_optional: not used
+
+  // Note to avoid writing trivial always_ff statements we can use this macro defined in registers.svh 
+  `FF(mgr_gnt_q, mgr_gnt_d, '0);
+  `FF(mgr_rvalid_q , mgr_rvalid_d , '0);
+  `FF(mgr_rdata_q , mgr_rdata_d , '0);
+  `FF(mgr_rid_q , mgr_rid_d , '0);
+  `FF(mgr_err_q , mgr_err_d , '0);
+
+  // Wire the reponse (master)
+  assign mgr_gnt_d = mgr_obi_rsp_i.gnt;
+  assign mgr_rvalid_d = mgr_obi_rsp_i.rvalid;
+  assign mgr_rdata_d = mgr_obi_rsp_i.r.rdata;
+  assign mgr_rid_d = mgr_obi_rsp_i.r.rid;
+  assign mgr_err_d = mgr_obi_rsp_i.r.err;
+
+  // Wire the request (master)
+  assign mgr_obi_req_o.req = mgr_req;
+  assign mgr_obi_req_o.a.addr = mgr_addr;
+  assign mgr_obi_req_o.a.we = mgr_we;
+  assign mgr_obi_req_o.a.be = mgr_be;
+  assign mgr_obi_req_o.a.wdata = mgr_wdata;
+  assign mgr_obi_req_o.a.aid = mgr_aid;
+  assign mgr_obi_req_o.a.a_optional = '0;
+
 
 
 
@@ -92,9 +146,9 @@ module crocdic_top #(
 
   // Registers to hold data coming from the CPU (Register File)
   operation_t operation_d, operation_q;
-  logic [ObiCfg.AddrWidth-1:0] source_array_address_d, source_array_address_q;
-  logic [ObiCfg.AddrWidth-1:0] number_of_elements_d, number_of_elements_q;
-  logic [ObiCfg.AddrWidth-1:0] destination_array_address_d, destination_array_address_q;
+  logic [SbrObiCfg.AddrWidth-1:0] source_array_address_d, source_array_address_q;
+  logic [SbrObiCfg.AddrWidth-1:0] number_of_elements_d, number_of_elements_q;
+  logic [SbrObiCfg.AddrWidth-1:0] destination_array_address_d, destination_array_address_q;
 
   `FF(operation_q, operation_d, SIN);
   `FF(source_array_address_q, source_array_address_d, '0);
@@ -103,8 +157,14 @@ module crocdic_top #(
  
   always_comb begin
     // Default assignments
-    rsp_data = '0;
-    rsp_err = '0;
+    sbr_rsp_data = '0;
+    sbr_rsp_err = '0;
+    mgr_req = '0;
+    mgr_addr = '0;
+    mgr_we = '0;
+    mgr_be = '0;
+    mgr_wdata = '0;
+    mgr_aid = '0;
     state_d = state_q;
     operation_d = operation_q;
     source_array_address_d = source_array_address_q;
@@ -113,35 +173,35 @@ module crocdic_top #(
 
     case(state_q)
       IDLE: begin
-        if (req_q && addr_q == CROCDIC_START) begin
-          if (we_q) begin
+        if (sbr_req_q && sbr_addr_q == CROCDIC_START) begin
+          if (sbr_we_q) begin
             state_d = CALCULATION_1;
           end else begin
-            rsp_err = '1;
+            sbr_rsp_err = '1;
           end
-        end else if (req_q && addr_q == CROCDIC_OPERATION) begin
-          if (we_q) begin
-            operation_d = operation_t'(wdata_q);
+        end else if (sbr_req_q && sbr_addr_q == CROCDIC_OPERATION) begin
+          if (sbr_we_q) begin
+            operation_d = operation_t'(sbr_wdata_q);
           end else begin
-            rsp_err = '1;
+            sbr_rsp_err = '1;
           end
-        end else if (req_q && addr_q == CROCDIC_SOURCE_ARRAY_ADDRESS) begin
-          if (we_q) begin
-            source_array_address_d = wdata_q;
+        end else if (sbr_req_q && sbr_addr_q == CROCDIC_SOURCE_ARRAY_ADDRESS) begin
+          if (sbr_we_q) begin
+            source_array_address_d = sbr_wdata_q;
           end else begin
-            rsp_err = '1;
+            sbr_rsp_err = '1;
           end
-        end else if (req_q && addr_q == CROCDIC_NR_OF_ELEMENTS) begin
-          if (we_q) begin
-            number_of_elements_d = wdata_q;
+        end else if (sbr_req_q && sbr_addr_q == CROCDIC_NR_OF_ELEMENTS) begin
+          if (sbr_we_q) begin
+            number_of_elements_d = sbr_wdata_q;
           end else begin
-            rsp_err = '1;
+            sbr_rsp_err = '1;
           end
-        end else if (req_q && addr_q == CROCDIC_DESTINATION_ARRAY_ADDRESS) begin
-          if (we_q) begin
-            destination_array_address_d = wdata_q;
+        end else if (sbr_req_q && sbr_addr_q == CROCDIC_DESTINATION_ARRAY_ADDRESS) begin
+          if (sbr_we_q) begin
+            destination_array_address_d = sbr_wdata_q;
           end else begin
-            rsp_err = '1;
+            sbr_rsp_err = '1;
           end
         end
       end
@@ -155,11 +215,11 @@ module crocdic_top #(
         state_d = DONE;
       end
       DONE: begin
-        if (req_q && addr_q == CROCDIC_DONE) begin
-          if (we_q) begin
-            rsp_err = '1;
+        if (sbr_req_q && sbr_addr_q == CROCDIC_DONE) begin
+          if (sbr_we_q) begin
+            sbr_rsp_err = '1;
           end else begin
-            rsp_data = '1;
+            sbr_rsp_data = '1;
 
             state_d = IDLE;
           end

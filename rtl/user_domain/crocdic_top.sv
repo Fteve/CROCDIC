@@ -134,9 +134,12 @@ module crocdic_top #(
 
   typedef enum logic [7:0] {
     IDLE, 
+    READ_ELEMENTS,
     CALCULATION_1, 
     CALCULATION_2, 
     CALCULATION_3, 
+    WRITE_ELEMENTS,
+    INCREMENT_COUNTER,
     DONE
   } state_t;
 
@@ -154,6 +157,15 @@ module crocdic_top #(
   `FF(source_array_address_q, source_array_address_d, '0);
   `FF(number_of_elements_q, number_of_elements_d, '0);
   `FF(destination_array_address_q, destination_array_address_d, '0);
+
+  // Register to hold elements to be processed and count how many elements have been processed so far
+  logic [MgrObiCfg.DataWidth-1:0] elements_d, elements_q;
+  logic [MgrObiCfg.AddrWidth-1:0] element_counter_d, element_counter_q;
+
+  `FF(elements_q, elements_d, '0);
+  `FF(element_counter_q, element_counter_d, '0);
+
+
  
   always_comb begin
     // Default assignments
@@ -170,12 +182,18 @@ module crocdic_top #(
     source_array_address_d = source_array_address_q;
     number_of_elements_d = number_of_elements_q;
     destination_array_address_d = destination_array_address_q;
+    elements_d = elements_q;
+    element_counter_d = element_counter_q;
 
     case(state_q)
       IDLE: begin
         if (sbr_req_q && sbr_addr_q == CROCDIC_START) begin
           if (sbr_we_q) begin
-            state_d = CALCULATION_1;
+            if (number_of_elements_q > 0) begin
+              state_d = READ_ELEMENTS;
+            end else begin
+              state_d = DONE;
+            end
           end else begin
             sbr_rsp_err = '1;
           end
@@ -205,6 +223,23 @@ module crocdic_top #(
           end
         end
       end
+      READ_ELEMENTS: begin
+        mgr_req = '1;
+        mgr_addr = source_array_address_q + 2 * element_counter_q;
+
+        if (element_counter_q + 1 == number_of_elements_q) begin  // only read 1 element if only 1 more element needs to be read instead of two
+          mgr_be = 4'b0011;
+        end else begin  // read both 16-bit elements if more than 1 element still needs to be read
+          mgr_be = '1;
+        end
+
+        if (mgr_rvalid_q) begin
+          elements_d = mgr_rdata_q;
+          mgr_req = '0;
+
+          state_d = CALCULATION_1;
+        end
+      end
       CALCULATION_1: begin
         state_d = CALCULATION_2;
       end
@@ -212,7 +247,34 @@ module crocdic_top #(
         state_d = CALCULATION_3;
       end
       CALCULATION_3: begin
-        state_d = DONE;
+        state_d = WRITE_ELEMENTS;
+      end
+      WRITE_ELEMENTS: begin
+        mgr_req = '1;
+        mgr_addr = destination_array_address_q + 2 * element_counter_q;
+        mgr_we = '1;
+        mgr_wdata = elements_q;
+
+        if (element_counter_q + 1 == number_of_elements_q) begin  // only write 1 element if only 1 more element needs to be written instead of two
+          mgr_be = 4'b0011;
+        end else begin  // write both 16-bit elements if more than 1 element still needs to be written
+          mgr_be = '1;
+        end
+
+        if (mgr_rvalid_q) begin
+          mgr_req = '0;
+
+          state_d = INCREMENT_COUNTER;
+        end
+      end
+      INCREMENT_COUNTER: begin
+        element_counter_d = element_counter_q + 2;  // increment element counter by 2 since 2 elements are being processed at once
+
+        if (element_counter_d >= number_of_elements_q) begin
+          state_d = DONE;
+        end else begin
+          state_d = READ_ELEMENTS;
+        end
       end
       DONE: begin
         if (sbr_req_q && sbr_addr_q == CROCDIC_DONE) begin

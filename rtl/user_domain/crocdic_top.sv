@@ -178,6 +178,16 @@ module crocdic_top #(
     endcase
 
 
+  crocdic_cordic i_cordic (
+
+    .en_i (state_q),
+    .source_array_i (source_array), // from DMA
+
+    .output_o ( user_mgr_obi_req ),
+
+  );
+
+
 
   end
 

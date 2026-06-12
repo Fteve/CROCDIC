@@ -12,9 +12,6 @@
 //           0.3.1 (08/11/10)
 //           Description of the universal CORDIC algorithm is finalized.
 // 
-// #include <stdio.h>
-// #include <math.h>
-
 #include "uart.h"
 #include "print.h"
 #include "config.h"
@@ -48,10 +45,6 @@ typedef enum {
 typedef short int integer; // work with 16-bit numbers
 //typedef integer int;
 
-integer source_array[1] = {23};
-integer destination_array[3] = {0};
- int length = sizeof(source_array) / sizeof(source_array[0]);
-
 //Cordic in 16 bit signed fixed point math
 //Function is valid for arguments in range -pi/2 -- pi/2
 //for values pi/2--pi: value = half_pi-(theta-half_pi) and similarly for values -pi---pi/2
@@ -65,7 +58,7 @@ integer destination_array[3] = {0};
 #define cordic_1K 9949
 #define cordic_1Kp 19783
 #define half_pi 25735
-//#define MUL 16384.000000
+// #define MUL 16384.000000
 #define MUL 16384
 #define CORDIC_NTAB 14
 
@@ -120,23 +113,21 @@ int main(int argc, char **argv)
 {
   uart_init();
 
+  float angle_array[1] = {1.16937};
+  integer source_array[1]; //to be passed into both sw and hw implementations
+  // integer destination_array[3] = {0};
+  int length = sizeof(source_array) / sizeof(source_array[0]);
+
   // Timestamps
   uint32_t t0, t1, t2;
+
   // Results
-  integer result_sw_cos[1] = {0};
-  integer result_sw_sin[1] = {0};
-  integer result_sw_CORDIC_cos[1] = {0};
-  integer result_sw_CORDIC_sin[1] = {0};
+  // integer result_sw_cos[1] = {0};
+  // integer result_sw_sin[1] = {0};
+  integer result_sw_CORDIC_cos[1];
+  integer result_sw_CORDIC_sin[1];
 
-  // t0 = get_mcycle();
-
-
-  // for (int i = 0; i < sizeof(source_array); i++) {
-  //   result_sw_sin[1] = sin(source_array[1]);
-  //   result_sw_cos[1] = cos(source_array[1]);
-  // }
-
-  t1 = get_mcycle();
+  for (int i = 0; i < length; i++) source_array[i] = angle_array[i] * MUL; //convert angles into Q2.14 format
 
   // *(volatile uint32_t *)CROCDIC_OPERATION = SIN;
   // *(volatile uint32_t *)CROCDIC_SOURCE_ARRAY_ADDRESS = (uint32_t)source_array;
@@ -146,8 +137,7 @@ int main(int argc, char **argv)
   // // start crocdic_top by writing something to the start_address
   // *(volatile uint32_t *)CROCDIC_START = 0xDEADBEEF;
 
-
-  //double p;
+  // double p;
   integer x1, y1, z1, x2, y2, z2, i, temp;   
   // integer* x2 = (integer *)CROCDIC_DESTINATION_ARRAY_ADDRESS + 0x0;
   // integer* y2 = (integer *)CROCDIC_DESTINATION_ARRAY_ADDRESS + 0x4;
@@ -158,144 +148,30 @@ int main(int argc, char **argv)
 #ifndef DATAGEN
   printf("SINE, COSINE\n");
 #endif
+
+  t0 = get_mcycle();
+
   gdirection = ROTATION; gmode = CIRCULAR;
   x1 = cordic_1K; y1 = 0;
-//   for (i = 0; i < 50; i++)
-//   {
-//     p = (i/50.0)*MY_PI/2;        
-//     z1 = (integer)(p * MUL);
-//     cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
-//     #ifdef DATAGEN    
-// // Use this to generate the "cordic_test_data.txt" reference vectors.
-//     printf("%04x %04x %04x %04x %04x %04x %04x %04x\n", 
-//       gdirection, gmode, x1&0xffff, y1&0xffff, z1&0xffff, x2&0xffff, y2&0xffff, z2&0xffff);
-// #else
-// // Use this to compare floating-point (math.h) against CORDIC fixed-point
-// // results.
-//     printf("%f : cos=%f (%f), sin=%f (%f)\n", p, x2/MUL, cos(p), y2/MUL, sin(p));
-// #endif    
-//   }       
 
   for (i = 0; i < length; i++) {
-    z1 = (integer)(source_array[1] * MUL); //target angle, multiplied by cosine constant term
+    // z1 = (integer)(source_array[i] * MUL); //target angle in rads, multiplied by cosine constant term
+    z1 = source_array[i];
     cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
-    // result_sw_CORDIC_cos[i] = *reg32(USER_ROM_BASE_ADDR, 0x24);
-    // result_sw_CORDIC_sin[i] = *reg32(USER_ROM_BASE_ADDR, 0x24);
     result_sw_CORDIC_cos[i] = x2;
     result_sw_CORDIC_sin[i] = y2;
   }
 
+  t1 = get_mcycle();
 
-  t2 = get_mcycle();
 
-  // printf("Software result:\n cos: %x\n sin: %x\n (0x%x cycles)\n", result_sw_cos, result_sw_sin, t1-t0);
-  printf("CORDIC result:\n cos: %x\n sin: %x\n (0x%x cycles)\n", result_sw_CORDIC_cos, result_sw_CORDIC_sin, t2-t1);
-
+  for (int i = 0; i < length; i++) {
+    printf("Software result [%x]:\n cos: %x\n sin: %x\n (0x%x cycles)\n", i, result_sw_CORDIC_cos[i], result_sw_CORDIC_sin[i], t1-t0);
+    // printf("CORDIC result:\n cos: %x\n sin: %x\n (0x%x cycles)\n", result_hw_CORDIC_cos[i]/MUL, result_hw_CORDIC_sin[i]/MUL, t1-t0);
+  }
+  
   uart_write_flush();
 
   return 0;
 
-
-//   // VECTORING, ATAN
-// #ifndef DATAGEN
-//   printf("\nARCTAN\n");
-// #endif
-//   gdirection = VECTORING; gmode = CIRCULAR;
-//   z1 = 0;
-//   for (x1 = 0; x1 <= 7000; x1+=500)
-//   {
-//     for (y1 = 0; y1 <= 7000; y1+=500)
-//     { 
-//       cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
-// #ifdef DATAGEN    
-// // Use this to generate the "cordic_test_data.txt" reference vectors.
-//     printf("%04x %04x %04x %04x %04x %04x %04x %04x\n", 
-//       gdirection, gmode, x1&0xffff, y1&0xffff, z1&0xffff, x2&0xffff, y2&0xffff, z2&0xffff);
-// #else
-// // Use this to compare floating-point (math.h) against CORDIC fixed-point
-// // results.
-//       printf("%d/%d: atan=%f (%f), y2 = %d\n", y1, x1, z2/MUL, atan((double)y1/x1), y2);
-// #endif
-//     }
-//   }       
-
-//   // HYPERBOLIC, VECTORING, SQUARE ROOT
-// #ifndef DATAGEN
-//   printf("\nSQUARE ROOT\n");
-// #endif
-//   gdirection = VECTORING; gmode = HYPERBOLIC;
-//   z1 = 0;
-//   for (w1 = 100; w1 <= 7000; w1+=100)
-//   {
-//      x1 = w1+(1<<12);
-//      y1 = w1-(1<<12);
-//      cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
-// #ifdef DATAGEN    
-// // Use this to generate the "cordic_test_data.txt" reference vectors.
-//     printf("%04x %04x %04x %04x %04x %04x %04x %04x\n", 
-//       gdirection, gmode, x1&0xffff, y1&0xffff, z1&0xffff, x2&0xffff, y2&0xffff, z2&0xffff);
-// #else
-// // Use this to compare floating-point (math.h) against CORDIC fixed-point
-// // results.
-//     printf("%d: sqrt=%f (%f)\n", w1, (cordic_1Kp/MUL)*x2/MUL, sqrt((double)w1/MUL));
-// #endif
-//   } 
-
-//   // LINEAR, VECTORING, RECIPROCAL
-// #ifndef DATAGEN
-//   printf("\nRECIPROCAL\n");
-// #endif
-//   gdirection = VECTORING; gmode = LINEAR;
-//   z1 = 0;
-//   y1 = (1<<14);
-//   for (x1 = 32000; x1 > 8000; x1-=250)
-//   {
-//     cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
-// #ifdef DATAGEN    
-// // Use this to generate the "cordic_test_data.txt" reference vectors.
-//     printf("%04x %04x %04x %04x %04x %04x %04x %04x\n", 
-//       gdirection, gmode, x1&0xffff, y1&0xffff, z1&0xffff, x2&0xffff, y2&0xffff, z2&0xffff);
-// #else
-// // Use this to compare floating-point (math.h) against CORDIC fixed-point
-// // results.
-//     printf("%d: 1/x=%f (%f)\n", x1, z2/MUL, (double)y1/x1);
-// #endif
-//   } 
-
-//   // HYPERBOLIC, VECTORING, SQUARE ROOT + LINEAR, VECTORING, RECIPROCAL
-// #ifndef DATAGEN
-//   printf("\nINVERSE SQUARE ROOT\n");
-// #endif
-//   for (w1 = 4000; w1 <= 28600; w1+=200)
-//   {
-//     gdirection = VECTORING; gmode = HYPERBOLIC; 
-//     z1 = 0;
-//     x1 = w1+(1<<12);
-//     y1 = w1-(1<<12);
-//     cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
-// #ifdef DATAGEN    
-// // Use this to generate the "cordic_test_data.txt" reference vectors.
-//     printf("%04x %04x %04x %04x %04x %04x %04x %04x\n", 
-//       gdirection, gmode, x1&0xffff, y1&0xffff, z1&0xffff, x2&0xffff, y2&0xffff, z2&0xffff);
-// #else
-// // Use this to compare floating-point (math.h) against CORDIC fixed-point
-// // results.
-//     printf("%d: sqrt=%f (%f)\n", w1, (cordic_1Kp/MUL)*x2/MUL, sqrt((double)w1/MUL));
-// #endif
-//     gdirection = VECTORING; gmode = LINEAR; 
-//     z1 = 0; 
-//     y1 = (1<<14); 
-//     x1 = (cordic_1Kp/MUL)*x2;
-//     cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
-// #ifdef DATAGEN    
-// // Use this to generate the "cordic_test_data.txt" reference vectors.
-//     printf("%04x %04x %04x %04x %04x %04x %04x %04x\n", 
-//       gdirection, gmode, x1&0xffff, y1&0xffff, z1&0xffff, x2&0xffff, y2&0xffff, z2&0xffff);
-// #else
-// // Use this to compare floating-point (math.h) against CORDIC fixed-point
-// // results.
-//     printf("%d: 1/sqrt(x)=%f (%f)\n", w1, z2/MUL, sqrt((double)MUL/w1));
-// #endif
-//   } 
-  // return (0);
 }

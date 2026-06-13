@@ -132,13 +132,15 @@ module crocdic_top #(
 
   // crocdic_top FSM
 
-  typedef enum logic [7:0] {
+  typedef enum logic [9:0] {
     IDLE, 
     READ_ELEMENTS,
+    WAIT_READ_RESPONSE,
     CALCULATION_1, 
     CALCULATION_2, 
     CALCULATION_3, 
     WRITE_ELEMENTS,
+    WAIT_WRITE_RESPONSE,
     INCREMENT_COUNTER,
     DONE
   } state_t;
@@ -232,6 +234,11 @@ module crocdic_top #(
         end else begin  // read both 16-bit elements if more than 1 element still needs to be read
           mgr_be = '1;
         end
+
+        if (mgr_gnt_q) begin
+          state_d = WAIT_READ_RESPONSE;
+        end 
+        
       end
       WAIT_READ_RESPONSE: begin
         if (mgr_rvalid_q) begin

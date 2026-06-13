@@ -59,6 +59,7 @@ integer cordic_hyp_steps[] = {
 integer gdirection; // {0: ROTATION, 1: VECTORING}
 integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 
+
 // source array of values in Q2.14 format to be computed
 integer source_array[50] =  {0, 514, 1029, 1544, 2058, 2573, 3088, 3603, 4117, 4632, 5147, 5661, 6176, 6691, 7206, 7720, 8235, 8750, 9264, 9779, 10294, 10809, 11323, 11838, 12353, 12867, 13382, 13897, 14412, 14926, 15441, 15956, 16470, 16985, 17500, 18015, 18529, 19044, 19559, 20074, 20588, 21103, 21618, 22132, 22647, 23162, 23677, 24191, 24706, 25221};
 
@@ -117,6 +118,7 @@ int main(int argc, char **argv)
   printf("SINE\n");
 
 
+  // RUN & BENCHMARK SOFTWARE IMPLEMENTATION
   t0 = get_mcycle();
 
   gdirection = ROTATION; gmode = CIRCULAR;
@@ -128,12 +130,47 @@ int main(int argc, char **argv)
     destination_array_SW[i] = y2;
   }
 
+  // RUN & BENCHMARK HARDWARE IMPLEMENTATION
   t1 = get_mcycle();
 
+  *(volatile uint32_t *)CROCDIC_OPERATION = SIN;
+  *(volatile uint32_t *)CROCDIC_SOURCE_ARRAY_ADDRESS = (uint32_t)source_array;
+  *(volatile uint32_t *)CROCDIC_NR_OF_ELEMENTS = length;
+  *(volatile uint32_t *)CROCDIC_DESTINATION_ARRAY_ADDRESS = (uint32_t)destination_array_HW;
 
-  for (int i = 0; i < length; i++) {
-    printf("Software result [%x]:\n sin: %x\n (0x%x cycles)\n", i, destination_array_SW[i], t1-t0);
+  // start crocdic_top by writing something to the start_address
+  *(volatile uint32_t *)CROCDIC_START = 0xDEADBEEF;
+
+  // wait until crocdic_top sets the done signal
+  while (*(volatile uint32_t *)CROCDIC_DONE == 0) 
+  {
+    //printf("STILL WAITING FOR CROCDIC_TOP TO COMPLETE\n"); // print statement should be removed in final performance test, as it adds a big delay
   }
+
+  t2 = get_mcycle();
+
+
+  // Verify that software result is equal to hardware result and print error message otherwise
+  for (int i = 0; i < length; i++) {
+    if (destination_array_SW[i] != destination_array_HW[i]) {
+      printf("!!MISMATCH BETWEEN SW AND HW RESULT at index position 0x%x!!\n", i);
+
+      while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
+    }
+  }
+
+  printf("SOFTWARE RESULTS\n");
+  for (int i = 0; i < length; i++) {
+    printf("SW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_SW[i]);
+  }
+
+  printf("HARDWARE RESULTS\n");
+  for (int i = 0; i < length; i++) {
+    printf("HW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_HW[i]);
+  }
+
+  printf("Software implementation took 0x%x cycles\n", t1-t0);
+  printf("Hardware implementation took 0x%x cycles\n", t2-t1);
   
   uart_write_flush();
 

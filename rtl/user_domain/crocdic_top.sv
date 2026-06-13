@@ -166,7 +166,7 @@ module crocdic_top #(
   logic [MgrObiCfg.AddrWidth-1:0] element_counter_d, element_counter_q;
 
   `FF(source_elements_q, source_elements_d, '0);
-  `FF(desetination_elements_q, destination_elements_d, '0);
+  `FF(destination_elements_q, destination_elements_d, '0);
   `FF(element_counter_q, element_counter_d, '0);
 
 
@@ -225,12 +225,6 @@ module crocdic_top #(
             destination_array_address_d = sbr_wdata_q;
           end else begin
             sbr_rsp_err = '1;
-          end
-        end else if (req_q && addr_q == CROCDIC_READ) begin
-          if (we_q) begin
-            rsp_err = '1;
-          end else begin
-            rsp_data = destination_array_address_q;
           end
         end
       end

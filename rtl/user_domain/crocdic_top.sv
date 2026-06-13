@@ -161,10 +161,12 @@ module crocdic_top #(
   `FF(destination_array_address_q, destination_array_address_d, '0);
 
   // Register to hold elements to be processed and count how many elements have been processed so far
-  logic [MgrObiCfg.DataWidth-1:0] elements_d, elements_q;
+  logic [MgrObiCfg.DataWidth-1:0] source_elements_d, source_elements_q, destination_elements_d, destination_elements_q;
+  logic [MgrObiCfg.DataWidth/2-1:0] cordic_output_0_o, cordic_output_1_o;
   logic [MgrObiCfg.AddrWidth-1:0] element_counter_d, element_counter_q;
 
-  `FF(elements_q, elements_d, '0);
+  `FF(source_elements_q, source_elements_d, '0);
+  `FF(desetination_elements_q, destination_elements_d, '0);
   `FF(element_counter_q, element_counter_d, '0);
 
 
@@ -184,7 +186,8 @@ module crocdic_top #(
     source_array_address_d = source_array_address_q;
     number_of_elements_d = number_of_elements_q;
     destination_array_address_d = destination_array_address_q;
-    elements_d = elements_q;
+    source_elements_d = source_elements_q;
+    destination_elements_d = destination_elements_q;
     element_counter_d = element_counter_q;
 
     case(state_q)
@@ -248,12 +251,15 @@ module crocdic_top #(
       end
       WAIT_READ_RESPONSE: begin
         if (mgr_rvalid_q) begin
-          elements_d = mgr_rdata_q;
+          source_elements_d = mgr_rdata_q;
 
           state_d = CALCULATION_1;
         end
       end
       CALCULATION_1: begin
+        destination_elements_d[15:0] = cordic_output_0_o;
+        destination_elements_d[31:16]= cordic_output_1_o;
+
         state_d = CALCULATION_2;
       end
       CALCULATION_2: begin
@@ -266,7 +272,7 @@ module crocdic_top #(
         mgr_req = '1;
         mgr_addr = destination_array_address_q + 2 * element_counter_q;
         mgr_we = '1;
-        mgr_wdata = elements_q;
+        mgr_wdata = destination_elements_q;
 
         if (element_counter_q + 1 == number_of_elements_q) begin  // only write 1 element if only 1 more element needs to be written instead of two
           mgr_be = 4'b0011;
@@ -307,22 +313,16 @@ module crocdic_top #(
         state_d = IDLE;
       end
     endcase
-
-
-  crocdic_cordic i_cordic (
-
-    .en_i (state_q),
-    .source_array_i (source_array), // from DMA
-
-    .output_o ( user_mgr_obi_req ),
-
-  );
-
-
-
   end
 
+crocdic_cordic i_cordic (
 
+  .input_element_i (source_elements_q[31:16]), // from DMA
+  .operation (operation_q),
+
+  .output_element_o (cordic_output_0_o),
+
+);
 
 
 

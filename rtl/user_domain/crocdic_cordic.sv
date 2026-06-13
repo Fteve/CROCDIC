@@ -4,17 +4,10 @@ module cordic #(
     parameter int WIDTH = 16,
     parameter int ITER  = 14
 )(
-    input  logic signed [WIDTH-1:0] xin,
-    input  logic signed [WIDTH-1:0] yin,
-    input  logic signed [WIDTH-1:0] zin,
-
-    // input  logic direction, // 0 = ROTATION, 1 = VECTORING
-    // input  logic [1:0] mode, // 0=CIRCULAR, 1=LINEAR, 2=HYPERBOLIC
+    input  logic signed [WIDTH-1:0] input_element_i,
     input  logic [2:0] operation,
 
-    output logic signed [WIDTH-1:0] xout,
-    output logic signed [WIDTH-1:0] yout,
-    output logic signed [WIDTH-1:0] zout
+    output logic signed [WIDTH-1:0] output_element_o,
 );
 
     localparam logic [1:0] ROTATION  = 0;
@@ -22,6 +15,9 @@ module cordic #(
     localparam logic [1:0] CIRCULAR  = 0;
     localparam logic [1:0] LINEAR    = 1;
     localparam logic [1:0] HYPERBOLIC = 2;
+
+    localparam logic [15:0] CORDIC_1K = 14'd9949;
+    localparam logic [15:0] CORDIC_1KP = 15'd19783;
 
     // ----------------------------
     // Lookup tables
@@ -96,22 +92,35 @@ module cordic #(
 
     logic direction; // 0 = ROTATION, 1 = VECTORING
     logic [1:0] mode;
-    logic signed [WIDTH-1:0] x, y, z;
+    logic signed [WIDTH-1:0] x, y, z, xout, yout, zout;
     logic signed [WIDTH-1:0] xbyk, ybyk;
     logic signed [WIDTH-1:0] x1, x2, y1, y2, z1, z2;
     logic d;
     int k, kk;
     int offset;
     int kfinal;
+
     // ----------------------------
     // CORDIC core
     // ----------------------------
+
+    assign z = input_element_i;
+
+
     always_comb begin
-        
+        direction = 0;
+        mode = 0;
+        x = 0;
+        y = 0;
+        output_element_o = 0;
+
         case(operation):
             SIN, COSINE: begin
                 direction = ROTATION;
                 mode = CIRCULAR;
+                x = CORDIC_1K;
+                y = 0;
+                output_element_o = zout;
             end
             ATAN: begin
                 direction = VECTORING;
@@ -131,9 +140,9 @@ module cordic #(
             end
         endcase
 
-        x = xin;
-        y = yin;
-        z = zin;
+        // x = xin;
+        // y = yin;
+        // z = zin;
 
         offset = (mode == HYPERBOLIC) ? 0 :
                  (mode == LINEAR)    ? 14 : 28;

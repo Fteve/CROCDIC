@@ -232,7 +232,8 @@ module crocdic_top #(
         end else begin  // read both 16-bit elements if more than 1 element still needs to be read
           mgr_be = '1;
         end
-
+      end
+      WAIT_READ_RESPONSE: begin
         if (mgr_rvalid_q) begin
           elements_d = mgr_rdata_q;
           mgr_req = '0;
@@ -261,6 +262,11 @@ module crocdic_top #(
           mgr_be = '1;
         end
 
+        if (mgr_gnt_q) begin
+          state_d = WAIT_WRITE_RESPONSE;
+        end  
+      end
+      WAIT_WRITE_RESPONSE: begin
         if (mgr_rvalid_q) begin
           mgr_req = '0;
 

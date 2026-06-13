@@ -132,7 +132,7 @@ module crocdic_top #(
 
   // crocdic_top FSM
 
-  typedef enum logic [9:0] {
+  typedef enum logic [7:0] {
     IDLE, 
     READ_ELEMENTS,
     WAIT_READ_RESPONSE,
@@ -243,7 +243,6 @@ module crocdic_top #(
       WAIT_READ_RESPONSE: begin
         if (mgr_rvalid_q) begin
           elements_d = mgr_rdata_q;
-          mgr_req = '0;
 
           state_d = CALCULATION_1;
         end
@@ -275,8 +274,6 @@ module crocdic_top #(
       end
       WAIT_WRITE_RESPONSE: begin
         if (mgr_rvalid_q) begin
-          mgr_req = '0;
-
           state_d = INCREMENT_COUNTER;
         end
       end

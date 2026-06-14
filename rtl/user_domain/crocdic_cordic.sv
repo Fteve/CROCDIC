@@ -106,9 +106,9 @@ module crocdic_cordic import user_pkg::*; #(
     int kfinal;
 
     logic [3:0] count_d, count_q;
-    logic [WIDTH-1:0] x_iteration_d, x_iteration_q;
-    logic [WIDTH-1:0] y_iteration_d, y_iteration_q;
-    logic [WIDTH-1:0] z_iteration_d, z_iteration_q;
+    logic signed [WIDTH-1:0] x_iteration_d, x_iteration_q;
+    logic signed[WIDTH-1:0] y_iteration_d, y_iteration_q;
+    logic signed [WIDTH-1:0] z_iteration_d, z_iteration_q;
 
 
     // ----------------------------
@@ -183,14 +183,14 @@ module crocdic_cordic import user_pkg::*; #(
                     end
                 endcase
             end else begin
-                d = (direction == ROTATION) ? (z_iteration_q >= 0) : (y_iteration_q < 0);
+                d = (direction == ROTATION) ? (~(z_iteration_q >= 0)) : (~(y_iteration_q < 0));
 
                 kk = (mode != HYPERBOLIC) ? count_q : HYP_STEPS[count_q];
 
                 xbyk = x_iteration_q >>> kk;
 
                 ybyk = (mode == HYPERBOLIC) ? -(y_iteration_q >>> kk) :
-                    (mode == LINEAR)    ? '0 :
+                    (mode == LINEAR) ? '0 :
                                             (y_iteration_q >>> kk);
 
                 x1 = x_iteration_q - ybyk;
@@ -220,41 +220,36 @@ module crocdic_cordic import user_pkg::*; #(
         output_element_o = 0;
         cordic_done_o = 0;
 
-        if (cordic_en_i) begin
-            if (count_q >= 14) begin
-                case (operation_i)
-                    COS: begin
-                        output_element_o = x_iteration_q;
-                    end
-                    SIN: begin
-                        output_element_o = y_iteration_q;
-                    end
-                    ATAN: begin
-                        output_element_o = z_iteration_q;
-                    end
-                    SQRT: begin
-                        output_element_o = x_iteration_q;
-                    end
-                    RECIPROCAL: begin
-                        output_element_o = z_iteration_q;
-                    end
-                    INVERSE_SQRT: begin
-                        output_element_o = z_iteration_q;
-                    end
-                    default: begin
-                        output_element_o = 0;
-                    end
-                endcase
+        if (count_q >= 14 || count_q == 0) begin
+            case (operation_i)
+                COS: begin
+                    output_element_o = x_iteration_q;
+                end
+                SIN: begin
+                    output_element_o = y_iteration_q;
+                end
+                ATAN: begin
+                    output_element_o = z_iteration_q;
+                end
+                SQRT: begin
+                    output_element_o = x_iteration_q;
+                end
+                RECIPROCAL: begin
+                    output_element_o = z_iteration_q;
+                end
+                INVERSE_SQRT: begin
+                    output_element_o = z_iteration_q;
+                end
+                default: begin
+                    output_element_o = 0;
+                end
+            endcase
 
-                cordic_done_o = 1;
-                
-            end else begin
-                cordic_done_o = 0;
-            end
-        end else begin
             cordic_done_o = 1;
+            
+        end else begin
+            cordic_done_o = 0;
         end
-
     end
 
 

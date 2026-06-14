@@ -266,17 +266,20 @@ module crocdic_top import user_pkg::*; #(
         if (cordic_done_0) begin
           destination_elements_d[15:0] = cordic_output_0;
           cordic_en_0 = 0;
+        end else begin
+          cordic_en_0 = 1;
         end
         if (cordic_done_1) begin
           destination_elements_d[31:16]= cordic_output_1;
           cordic_en_1 = 0;
+        end else begin
+          cordic_en_1 = 1;
         end
 
         if (cordic_done_0 && cordic_done_1) begin
           state_d = CALCULATION_3;
         end
 
-        state_d = CALCULATION_3;
       end
       CALCULATION_3: begin
         state_d = WRITE_ELEMENTS;
@@ -332,7 +335,7 @@ crocdic_cordic i_cordic_0 (
   .clk_i (clk_i),
   .rst_ni (rst_ni),
   .cordic_en_i (cordic_en_0),
-  .input_element_i (source_elements_q[31:16]), // from DMA
+  .input_element_i (source_elements_q[15:0]), // from DMA
   .operation_i (operation_q),
 
   .cordic_done_o (cordic_done_0),

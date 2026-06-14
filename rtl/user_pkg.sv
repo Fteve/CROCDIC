@@ -42,4 +42,14 @@ package user_pkg;
   // +1 for additional OBI error
   localparam int unsigned NumDemuxSbr = $size(UserAddrMap) + 1;
 
+  // Definitions for CORDIC operations
+  typedef enum logic [2:0] {
+    SIN          = 0,
+    COS          = 1,
+    ATAN         = 2,
+    SQRT         = 3,
+    RECIPROCAL   = 4,
+    INVERSE_SQRT = 5
+  } operation_t;
+
 endpackage

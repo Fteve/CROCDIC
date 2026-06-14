@@ -51,6 +51,7 @@ sources:
       - rtl/user_domain.sv
       # add your design files with modules here
       - rtl/user_domain/crocdic_top.sv
+      - rtl/user_domain/crocdic_cordic.sv
       # Level 3
       - rtl/croc_soc.sv
 

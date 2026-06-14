@@ -24,8 +24,8 @@ typedef enum {
 
 typedef short int integer;  // work with 16-bit numbers
 
-float angle_array[8] = {0, 0, 0, 1.16937, 0.34, 1.46, 0.82};
-integer source_array[8];
+// float angle_array[8] = {0, 0, 0, 1.16937, 0.34, 1.46, 0.82};
+integer source_array[8] = {0, 0, 0, 19158, 5570, 23920, 13434, 0};
 
 
 integer destination_array[8] = {9, 9, 9, 9, 9, 9, 9, 9};
@@ -36,7 +36,10 @@ int main() {
 
     int length = sizeof(source_array) / sizeof(source_array[0]);
 
-    for (int i = 0; i < length; i++) source_array[i] = angle_array[i] * MUL; //convert angles into Q2.14 format
+    // for (int i = 0; i < length; i++) {
+    //     source_array[i] = angle_array[i] * MUL; //convert angles into Q2.14 format
+    //     printf("source_array[%x] = %x \n", i, source_array[i]);
+    // }
 
     // write operation type, source array address, number of elements and destination array address into crocdic_top register file
     *(volatile uint32_t *)CROCDIC_OPERATION = SIN;

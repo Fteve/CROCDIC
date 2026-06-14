@@ -178,6 +178,7 @@
 ../rtl/croc_domain.sv
 ../rtl/user_domain.sv
 ../rtl/user_domain/crocdic_top.sv
+../rtl/user_domain/crocdic_cordic.sv
 ../rtl/croc_soc.sv
 ../rtl/croc_chip.sv
 ../rtl/test/tb_croc_pkg.sv

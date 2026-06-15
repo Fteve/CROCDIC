@@ -61,13 +61,10 @@ integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 
 
 // source array of values in Q2.14 format to be computed
-// integer source_array[50] =  {0, 514, 1029, 1544, 2058, 2573, 3088, 3603, 4117, 4632, 5147, 5661, 6176, 6691, 7206, 7720, 8235, 8750, 9264, 9779, 10294, 10809, 11323, 11838, 12353, 12867, 13382, 13897, 14412, 14926, 15441, 15956, 16470, 16985, 17500, 18015, 18529, 19044, 19559, 20074, 20588, 21103, 21618, 22132, 22647, 23162, 23677, 24191, 24706, 25221};
+integer source_array[50] =  {0, 514, 1029, 1544, 2058, 2573, 3088, 3603, 4117, 4632, 5147, 5661, 6176, 6691, 7206, 7720, 8235, 8750, 9264, 9779, 10294, 10809, 11323, 11838, 12353, 12867, 13382, 13897, 14412, 14926, 15441, 15956, 16470, 16985, 17500, 18015, 18529, 19044, 19559, 20074, 20588, 21103, 21618, 22132, 22647, 23162, 23677, 24191, 24706, 25221};
 
-integer destination_array_SW[8];
-integer destination_array_HW[8];
-
-// float angle_array[8] = {0, 0, 0, 1.16937, 0.34, 1.46, 0.82};
-integer source_array[8] = {0, 0, 0, 19158, 5570, 23920, 13434, 0};
+integer destination_array_SW[50];
+integer destination_array_HW[50];
 
 
 void cordic(integer direction, integer mode, integer xin, integer yin, integer zin, integer *xout, integer *yout, integer *zout)
@@ -154,13 +151,13 @@ int main(int argc, char **argv)
 
 
   // Verify that software result is equal to hardware result and print error message otherwise
-  // for (int i = 0; i < length; i++) {
-  //   if (destination_array_SW[i] != destination_array_HW[i]) {
-  //     printf("!!MISMATCH BETWEEN SW AND HW RESULT at index position 0x%x!!\n", i);
+  for (int i = 0; i < length; i++) {
+    if (destination_array_SW[i] != destination_array_HW[i]) {
+      printf("!!MISMATCH BETWEEN SW AND HW RESULT at index position 0x%x!!\n", i);
 
-  //     // while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
-  //   }
-  // }
+      while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
+    }
+  }
 
   printf("SOFTWARE RESULTS\n");
   for (int i = 0; i < length; i++) {

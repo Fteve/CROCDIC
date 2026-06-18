@@ -309,22 +309,28 @@ module crocdic_top import user_pkg::*; #(
     endcase
   end
 
-  crocdic_cordic i_cordic_0 (
+  crocdic_cordic i_cordic_0 #(
+    .INST (0)
+    ) (
     .clk_i (clk_i),
     .rst_ni (rst_ni),
     .cordic_en_i (cordic_en_0),
-    .input_element_i (elements_q[15:0]), // from DMA
+    .input_element_0_i (elements_0_q[15:0]),
+    .input_element_1_i (elements_0_q[31:16]),
     .operation_i (operation_q),
 
     .cordic_done_o (cordic_done_0),
     .output_element_o (cordic_output_0)
   );
 
-  crocdic_cordic i_cordic_1 (
+  crocdic_cordic i_cordic_1 #(
+    .INST (1)
+  ) (
     .clk_i (clk_i),
     .rst_ni (rst_ni),
     .cordic_en_i (cordic_en_1),
-    .input_element_i (elements_q[31:16]), // from DMA
+    .input_element_0_i (elements_1_q[15:0]),
+    .input_element_1_i (elements_1_q[31:16]),
     .operation_i (operation_q),
 
     .cordic_done_o (cordic_done_1),

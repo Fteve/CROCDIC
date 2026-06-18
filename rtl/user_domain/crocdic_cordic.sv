@@ -2,13 +2,15 @@
 
 module crocdic_cordic import user_pkg::*; #(
     parameter int WIDTH = 16,
-    parameter int ITER  = 14
+    parameter int ITER  = 14,
+    parameter int INST  = 0
 ) (
     input logic clk_i,
     // Active-low reset
     input logic rst_ni,
     input logic cordic_en_i,
-    input logic [WIDTH-1:0] input_element_i,
+    input logic [WIDTH-1:0] input_element_0_i,
+    input logic [WIDTH-1:0] input_element_1_i,
     input operation_t operation_i,
 
     output logic cordic_done_o,
@@ -23,6 +25,7 @@ module crocdic_cordic import user_pkg::*; #(
 
   localparam logic [WIDTH-1:0] CORDIC_1K = 16'd9949;
   localparam logic [WIDTH-1:0] CORDIC_1KP = 16'd19783;
+  localparam logic [WIDTH-1:0] MUL = 16'd16384;
 
   // ----------------------------
   // Lookup tables
@@ -171,13 +174,23 @@ module crocdic_cordic import user_pkg::*; #(
       IDLE: begin
         count_d = '0;
 
-        if (operation_i == SIN || operation_i == COS) begin
-          x_iteration_d = CORDIC_1K;
-          y_iteration_d = '0;
-          z_iteration_d = input_element_i;
-        end
-        // TODO: set the starting conditions for the other operations
-
+        case (operation_i)
+          SIN, COS: begin
+            x_iteration_d = CORDIC_1K;
+            y_iteration_d = '0;
+            z_iteration_d = (INST == 0) ? input_element_0_i : input_element_1_i;
+          end
+          ATAN, SQRT: begin
+            x_iteration_d = input_element_0_i;
+            y_iteration_d = input_element_1_i;
+            z_iteration_d = '0;
+          end
+          RECIPROCAL: begin
+            x_iteration_d = (INST == 0) ? input_element_0_i : input_element_1_i;
+            y_iteration_d = MUL;
+            z_iteration_d = '0;
+          end
+        endcase
 
         if (cordic_en_i) begin
           state_d = CALCULATE;
@@ -235,13 +248,10 @@ module crocdic_cordic import user_pkg::*; #(
           output_element_o = z_iteration_q;
         end
         SQRT: begin
-          output_element_o = x_iteration_q; // TODO: still needs to be adjusted to output correct output value
+          output_element_o =  CORDIC_1KP * x_iteration_q; // Remember to divide by MUL once in SW for Q2.14 form, twice for normal decimal form
         end
         RECIPROCAL: begin
           output_element_o = z_iteration_q; 
-        end
-        INVERSE_SQRT: begin
-          output_element_o = z_iteration_q;
         end
         default: begin
           output_element_o = '0;

@@ -249,24 +249,31 @@ module crocdic_top import user_pkg::*; #(
           state_d = START_CORDIC;
         end
       end
-      START_CORDIC: begin //Read two elements per cordic module for ops. ATAN and SQRT. Input array needs to be alternating 2 x-values, 2 respective y-values in SW
+      START_CORDIC: begin //Read two elements per cordic module for ATAN and SQRT. Input array needs to be alternating x and y values in SW
         if (operation_q == ATAN || operation_q == SQRT) begin
           if (which_input_q == 0) begin
             elements_0 = elements_q;
             which_input_d = 1;
+            cordic_en_0 = 1;
 
-            element_counter_d = element_counter_q + 2; //Read next 2 respective y-value elements
-            state_d = READ_ELEMENTS;
+            if (element_counter_q + 2 == number_of_elements_q) begin //Only use one cordic module if only one calculation left
+              state_d = WAIT_CORDIC;
+            end else begin
+              element_counter_d = element_counter_q + 2; //Read next 2 elements for the other cordic module
+              state_d =  READ_ELEMENTS;
+            end
+
           end else begin
             elements_1 = elements_q;
             which_input_d = 0;
-            cordic_en_0 = 1;
             cordic_en_1 = 1;
 
-            state_d = WAIT_CORDIC;
+            state_d = WAIT_CORDIC; //Wait for both cordic modules to finish
           end
-        end else begin
-          elements_0 = elements_q;
+
+        end else begin //For all other operations, single input per cordic module
+          elements_0 [15:0] = elements_q [15:0];
+          elements_1 [15:0] = elements_q [31:16];
           cordic_en_0 = 1;
           cordic_en_1 = 1;
 
@@ -289,11 +296,11 @@ module crocdic_top import user_pkg::*; #(
       end
       WRITE_ELEMENTS: begin
         mgr_req = '1;
-        mgr_addr = destination_array_address_q + 2 * element_counter_q;
+        mgr_addr = (operation_q == ATAN || operation_q == SQRT) ? destination_array_address_q + element_counter_q : destination_array_address_q + 2 * element_counter_q;
         mgr_we = '1;
         mgr_wdata = elements_q;
 
-        if (element_counter_q + 1 == number_of_elements_q) begin  // only write 1 element if only 1 more element needs to be written instead of two
+        if (element_counter_q + 1 == number_of_elements_q || ((operation_q == ATAN || operation_q == SQRT) && element_counter_q + 2 == number_of_elements_q)) begin  // only write 1 element if only 1 more element needs to be written instead of two
           mgr_be = 4'b0011;
         end else begin  // write both 16-bit elements if more than 1 element still needs to be written
           mgr_be = '1;
@@ -336,7 +343,7 @@ module crocdic_top import user_pkg::*; #(
     .rst_ni (rst_ni),
     .cordic_en_i (cordic_en_0),
     .input_element_0_i (elements_0[15:0]), //Only use input_element_0_i for SIN, COS, RECIPROCAL, input_element_0_1_i remains default value
-    .input_element_1_i (elements_1[15:0]),
+    .input_element_1_i (elements_0[31:16]),
     .operation_i (operation_q),
 
     .cordic_done_o (cordic_done_0),
@@ -347,7 +354,7 @@ module crocdic_top import user_pkg::*; #(
     .clk_i (clk_i),
     .rst_ni (rst_ni),
     .cordic_en_i (cordic_en_1),
-    .input_element_0_i (elements_0[31:16]),
+    .input_element_0_i (elements_1[15:0]),
     .input_element_1_i (elements_1[31:16]),
     .operation_i (operation_q),
 

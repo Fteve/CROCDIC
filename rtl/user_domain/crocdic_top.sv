@@ -254,9 +254,9 @@ module crocdic_top import user_pkg::*; #(
           if (which_input_q == 0) begin
             elements_0 = elements_q;
             which_input_d = 1;
-            cordic_en_0 = 1;
 
             if (element_counter_q + 2 == number_of_elements_q) begin //Only use one cordic module if only one calculation left
+              which_input_d = 0;
               state_d = WAIT_CORDIC;
             end else begin
               element_counter_d = element_counter_q + 2; //Read next 2 elements for the other cordic module
@@ -266,6 +266,7 @@ module crocdic_top import user_pkg::*; #(
           end else begin
             elements_1 = elements_q;
             which_input_d = 0;
+            cordic_en_0 = 1;
             cordic_en_1 = 1;
 
             state_d = WAIT_CORDIC; //Wait for both cordic modules to finish

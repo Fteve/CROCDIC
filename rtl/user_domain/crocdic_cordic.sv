@@ -2,8 +2,7 @@
 
 module crocdic_cordic import user_pkg::*; #(
     parameter int WIDTH = 16,
-    parameter int ITER  = 14,
-    parameter int INST  = 0
+    parameter int ITER  = 14
 ) (
     input logic clk_i,
     // Active-low reset
@@ -178,7 +177,7 @@ module crocdic_cordic import user_pkg::*; #(
           SIN, COS: begin
             x_iteration_d = CORDIC_1K;
             y_iteration_d = '0;
-            z_iteration_d = (INST == 0) ? input_element_0_i : input_element_1_i;
+            z_iteration_d = input_element_0_i;
           end
           ATAN, SQRT: begin
             x_iteration_d = input_element_0_i;
@@ -186,7 +185,7 @@ module crocdic_cordic import user_pkg::*; #(
             z_iteration_d = '0;
           end
           RECIPROCAL: begin
-            x_iteration_d = (INST == 0) ? input_element_0_i : input_element_1_i;
+            x_iteration_d = input_element_0_i;
             y_iteration_d = MUL;
             z_iteration_d = '0;
           end

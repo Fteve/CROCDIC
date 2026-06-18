@@ -152,11 +152,13 @@ module crocdic_top import user_pkg::*; #(
   `FF(destination_array_address_q, destination_array_address_d, '0);
 
   // Register to hold elements to be processed and count how many elements have been processed so far
-  logic [MgrObiCfg.DataWidth-1:0] elements_d, elements_q;  // one set of registers can be used to store both source and destination elements
+  logic [MgrObiCfg.DataWidth-1:0] elements_d, elements_q, elements_0, elements_1;  // one set of registers can be used to store both source and destination elements
   logic [MgrObiCfg.AddrWidth-1:0] element_counter_d, element_counter_q;
+  logic which_input_d, which_input_q; //For assigning element to correct input of crocdic_cordic
 
   `FF(elements_q, elements_d, '0);
   `FF(element_counter_q, element_counter_d, '0);
+  `FF(which_input_q, which_input_d, '0);
 
   logic cordic_en_0, cordic_en_1, cordic_done_0, cordic_done_1;
   logic [MgrObiCfg.DataWidth/2-1:0] cordic_output_0, cordic_output_1;
@@ -171,6 +173,8 @@ module crocdic_top import user_pkg::*; #(
     mgr_be = '0;
     mgr_wdata = '0;
     mgr_aid = '0;
+    elements_0 = '0;
+    elements_1 = '0;
     cordic_en_0 = '0;
     cordic_en_1 = '0;
     state_d = state_q;
@@ -180,6 +184,8 @@ module crocdic_top import user_pkg::*; #(
     destination_array_address_d = destination_array_address_q;
     elements_d = elements_q;
     element_counter_d = element_counter_q;
+    which_input_d = which_input_q;
+
 
     case(state_q)
       IDLE: begin
@@ -243,12 +249,29 @@ module crocdic_top import user_pkg::*; #(
           state_d = START_CORDIC;
         end
       end
-      START_CORDIC: begin
-        cordic_en_0 = 1;
-        cordic_en_1 = 1;
+      START_CORDIC: begin //Read two elements per cordic module for ops. ATAN and SQRT. Input array needs to be alternating 2 x-values, 2 respective y-values in SW
+        if (operation_q == ATAN || operation_q == SQRT) begin
+          if (which_input_q == 0) begin
+            elements_0 = elements_q;
+            which_input_d = 1;
 
-        state_d = WAIT_CORDIC;
-        
+            element_counter_d = element_counter_q + 2; //Read next 2 respective y-value elements
+            state_d = READ_ELEMENTS;
+          end else begin
+            elements_1 = elements_q;
+            which_input_d = 0;
+            cordic_en_0 = 1;
+            cordic_en_1 = 1;
+
+            state_d = WAIT_CORDIC;
+          end
+        end else begin
+          elements_0 = elements_q;
+          cordic_en_0 = 1;
+          cordic_en_1 = 1;
+
+          state_d = WAIT_CORDIC;
+        end  
       end
       WAIT_CORDIC: begin
         if (cordic_done_0) begin
@@ -298,7 +321,6 @@ module crocdic_top import user_pkg::*; #(
             sbr_rsp_err = '1;
           end else begin
             sbr_rsp_data = '1;
-
             state_d = IDLE;
           end
         end
@@ -309,28 +331,24 @@ module crocdic_top import user_pkg::*; #(
     endcase
   end
 
-  crocdic_cordic i_cordic_0 #(
-    .INST (0)
-    ) (
+  crocdic_cordic i_cordic_0 (
     .clk_i (clk_i),
     .rst_ni (rst_ni),
     .cordic_en_i (cordic_en_0),
-    .input_element_0_i (elements_0_q[15:0]),
-    .input_element_1_i (elements_0_q[31:16]),
+    .input_element_0_i (elements_0[15:0]), //Only use input_element_0_i for SIN, COS, RECIPROCAL, input_element_0_1_i remains default value
+    .input_element_1_i (elements_1[15:0]),
     .operation_i (operation_q),
 
     .cordic_done_o (cordic_done_0),
     .output_element_o (cordic_output_0)
   );
 
-  crocdic_cordic i_cordic_1 #(
-    .INST (1)
-  ) (
+  crocdic_cordic i_cordic_1 (
     .clk_i (clk_i),
     .rst_ni (rst_ni),
     .cordic_en_i (cordic_en_1),
-    .input_element_0_i (elements_1_q[15:0]),
-    .input_element_1_i (elements_1_q[31:16]),
+    .input_element_0_i (elements_0[31:16]),
+    .input_element_1_i (elements_1[31:16]),
     .operation_i (operation_q),
 
     .cordic_done_o (cordic_done_1),

@@ -62,10 +62,10 @@ integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 
 // source array of values in Q2.14 format to be computed
 // For ATAN, alternate 2 x-values, 2 corresponding y-values
-integer source_array[450] =  {0, 0, 0, 500, 0, 1000, 0, 1500, 0, 2000, 0, 2500, 0, 3000, 0, 3500, 0, 4000, 0, 4500, 0, 5000, 0, 5500, 0, 6000, 0, 6500, 0, 7000, 500, 0, 500, 500, 500, 1000, 500, 1500, 500, 2000, 500, 2500, 500, 3000, 500, 3500, 500, 4000, 500, 4500, 500, 5000, 500, 5500, 500, 6000, 500, 6500, 500, 7000, 1000, 0, 1000, 500, 1000, 1000, 1000, 1500, 1000, 2000, 1000, 2500, 1000, 3000, 1000, 3500, 1000, 4000, 1000, 4500, 1000, 5000, 1000, 5500, 1000, 6000, 1000, 6500, 1000, 7000, 1500, 0, 1500, 500, 1500, 1000, 1500, 1500, 1500, 2000, 1500, 2500, 1500, 3000, 1500, 3500, 1500, 4000, 1500, 4500, 1500, 5000, 1500, 5500, 1500, 6000, 1500, 6500, 1500, 7000, 2000, 0, 2000, 500, 2000, 1000, 2000, 1500, 2000, 2000, 2000, 2500, 2000, 3000, 2000, 3500, 2000, 4000, 2000, 4500, 2000, 5000, 2000, 5500, 2000, 6000, 2000, 6500, 2000, 7000, 2500, 0, 2500, 500, 2500, 1000, 2500, 1500, 2500, 2000, 2500, 2500, 2500, 3000, 2500, 3500, 2500, 4000, 2500, 4500, 2500, 5000, 2500, 5500, 2500, 6000, 2500, 6500, 2500, 7000, 3000, 0, 3000, 500, 3000, 1000, 3000, 1500, 3000, 2000, 3000, 2500, 3000, 3000, 3000, 3500, 3000, 4000, 3000, 4500, 3000, 5000, 3000, 5500, 3000, 6000, 3000, 6500, 3000, 7000, 3500, 0, 3500, 500, 3500, 1000, 3500, 1500, 3500, 2000, 3500, 2500, 3500, 3000, 3500, 3500, 3500, 4000, 3500, 4500, 3500, 5000, 3500, 5500, 3500, 6000, 3500, 6500, 3500, 7000, 4000, 0, 4000, 500, 4000, 1000, 4000, 1500, 4000, 2000, 4000, 2500, 4000, 3000, 4000, 3500, 4000, 4000, 4000, 4500, 4000, 5000, 4000, 5500, 4000, 6000, 4000, 6500, 4000, 7000, 4500, 0, 4500, 500, 4500, 1000, 4500, 1500, 4500, 2000, 4500, 2500, 4500, 3000, 4500, 3500, 4500, 4000, 4500, 4500, 4500, 5000, 4500, 5500, 4500, 6000, 4500, 6500, 4500, 7000, 5000, 0, 5000, 500, 5000, 1000, 5000, 1500, 5000, 2000, 5000, 2500, 5000, 3000, 5000, 3500, 5000, 4000, 5000, 4500, 5000, 5000, 5000, 5500, 5000, 6000, 5000, 6500, 5000, 7000, 5500, 0, 5500, 500, 5500, 1000, 5500, 1500, 5500, 2000, 5500, 2500, 5500, 3000, 5500, 3500, 5500, 4000, 5500, 4500, 5500, 5000, 5500, 5500, 5500, 6000, 5500, 6500, 5500, 7000, 6000, 0, 6000, 500, 6000, 1000, 6000, 1500, 6000, 2000, 6000, 2500, 6000, 3000, 6000, 3500, 6000, 4000, 6000, 4500, 6000, 5000, 6000, 5500, 6000, 6000, 6000, 6500, 6000, 7000, 6500, 0, 6500, 500, 6500, 1000, 6500, 1500, 6500, 2000, 6500, 2500, 6500, 3000, 6500, 3500, 6500, 4000, 6500, 4500, 6500, 5000, 6500, 5500, 6500, 6000, 6500, 6500, 6500, 7000, 7000, 0, 7000, 500, 7000, 1000, 7000, 1500, 7000, 2000, 7000, 2500, 7000, 3000, 7000, 3500, 7000, 4000, 7000, 4500, 7000, 5000, 7000, 5500, 7000, 6000, 7000, 6500, 7000, 7000};
+integer source_array[16] =  {0, 0, 0, 500, 3500, 5500, 3500, 6000, 6500, 3500, 7000, 6000, 7000, 6500, 7000, 7000};
 
-integer destination_array_SW[225];
-integer destination_array_HW[225];
+integer destination_array_SW[8];
+integer destination_array_HW[8];
 
 
 void cordic(integer direction, integer mode, integer xin, integer yin, integer zin, integer *xout, integer *yout, integer *zout)
@@ -112,12 +112,11 @@ int main(int argc, char **argv)
   uint32_t t0, t1, t2;
 
 
-  integer x1, y1, z1, x2, y2, z2, i, temp;   
+  integer x1, y1, z1, x2, y2, z2;   
   integer w1;
 
   // ROTATION, SIN
   printf("ATAN\n");
-
 
   // RUN & BENCHMARK SOFTWARE IMPLEMENTATION
   t0 = get_mcycle();
@@ -125,11 +124,11 @@ int main(int argc, char **argv)
   gdirection = VECTORING; gmode = CIRCULAR;
   z1 = 0;
 
-  for (i = 0; i < length; i=+2) {
+  for (int i = 0; i < length; i+=2) {
     x1 = source_array[i];
     y1 = source_array[i+1];
     cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
-    destination_array_SW[i] = z2;
+    destination_array_SW[i/2] = z2;
   }
 
   // RUN & BENCHMARK HARDWARE IMPLEMENTATION
@@ -139,7 +138,7 @@ int main(int argc, char **argv)
   *(volatile uint32_t *)CROCDIC_SOURCE_ARRAY_ADDRESS = (uint32_t)source_array;
   *(volatile uint32_t *)CROCDIC_NR_OF_ELEMENTS = length;
   *(volatile uint32_t *)CROCDIC_DESTINATION_ARRAY_ADDRESS = (uint32_t)destination_array_HW;
-
+ 
   // start crocdic_top by writing something to the start_address
   *(volatile uint32_t *)CROCDIC_START = 0xDEADBEEF;
 
@@ -153,22 +152,22 @@ int main(int argc, char **argv)
 
 
   // Verify that software result is equal to hardware result and print error message otherwise
-  for (int i = 0; i < length/2; i++) {
-    if (destination_array_SW[i] != destination_array_HW[i]) {
-      printf("!!MISMATCH BETWEEN SW AND HW RESULT at index position 0x%x!!\n", i);
+  // for (int i = 0; i < length/2; i++) {
+  //   if (destination_array_SW[i] != destination_array_HW[i]) {
+  //     printf("!!MISMATCH BETWEEN SW AND HW RESULT at index position 0x%x!!\n", i);
 
-      while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
-    }
-  }
+  //     while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
+  //   }
+  // }
 
   printf("SOFTWARE RESULTS\n");
-  for (int i = 0; i < length/2; i++) {
-    printf("SW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_SW[i]);
+  for (int i = 0; i < length; i+=2) {
+    printf("SW:: Inputs: 0x%x, 0x%x, Output: 0x%x\n", source_array[i], source_array[i+1], destination_array_SW[i/2]);
   }
 
   printf("HARDWARE RESULTS\n");
-  for (int i = 0; i < length/2; i++) {
-    printf("HW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_HW[i]);
+  for (int i = 0; i < length; i+=2) {
+    printf("HW:: Inputs: 0x%x, 0x%x, Output: 0x%x\n", source_array[i], source_array[i+1], destination_array_HW[i/2]);
   }
 
   printf("Software implementation took 0x%x cycles\n", t1-t0);

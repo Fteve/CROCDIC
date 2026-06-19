@@ -125,11 +125,13 @@ module crocdic_top import user_pkg::*; #(
 
   // crocdic_top FSM
 
-  typedef enum logic [2:0] {
+  typedef enum logic [3:0] {
     IDLE, 
     READ_ELEMENTS,
     WAIT_READ_RESPONSE,
     START_CORDIC, 
+    DUAL_INPUT_LOAD_0,
+    DUAL_INPUT_LOAD_1,
     WAIT_CORDIC,
     WRITE_ELEMENTS,
     WAIT_WRITE_RESPONSE,
@@ -252,26 +254,10 @@ module crocdic_top import user_pkg::*; #(
       START_CORDIC: begin //Read two elements per cordic module for ATAN and SQRT. Input array needs to be alternating x and y values in SW
         if (operation_q == ATAN || operation_q == SQRT) begin
           if (which_input_q == 0) begin
-            elements_0 = elements_q;
-            which_input_d = 1;
-
-            if (element_counter_q + 2 == number_of_elements_q) begin //Only use one cordic module if only one calculation left
-              which_input_d = 0;
-              state_d = WAIT_CORDIC;
-            end else begin
-              element_counter_d = element_counter_q + 2; //Read next 2 elements for the other cordic module
-              state_d =  READ_ELEMENTS;
-            end
-
+            state_d = DUAL_INPUT_LOAD_0;
           end else begin
-            elements_1 = elements_q;
-            which_input_d = 0;
-            cordic_en_0 = 1;
-            cordic_en_1 = 1;
-
-            state_d = WAIT_CORDIC; //Wait for both cordic modules to finish
+            state_d = DUAL_INPUT_LOAD_1;
           end
-
         end else begin //For all other operations, single input per cordic module
           elements_0 [15:0] = elements_q [15:0];
           elements_1 [15:0] = elements_q [31:16];
@@ -280,6 +266,28 @@ module crocdic_top import user_pkg::*; #(
 
           state_d = WAIT_CORDIC;
         end  
+      end
+      DUAL_INPUT_LOAD_0: begin
+        elements_0 = elements_q;
+
+        if (element_counter_q + 2 == number_of_elements_q) begin //Only use one cordic module if only one calculation left
+          cordic_en_0 = 1;
+          cordic_en_1 = 1; //Start both cordic modules but only write one of the results
+          state_d = WAIT_CORDIC;
+        end else begin
+          element_counter_d = element_counter_q + 2; //Read next 2 elements for the other cordic module
+          state_d =  READ_ELEMENTS;
+          which_input_d = 1;
+        end
+        
+      end
+      DUAL_INPUT_LOAD_1: begin
+        elements_1 = elements_q;
+        which_input_d = 0;
+        cordic_en_0 = 1;
+        cordic_en_1 = 1;
+
+        state_d = WAIT_CORDIC; //Wait for both cordic modules to finish
       end
       WAIT_CORDIC: begin
         if (cordic_done_0) begin

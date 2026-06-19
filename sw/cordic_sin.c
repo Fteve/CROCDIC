@@ -111,7 +111,7 @@ int main(int argc, char **argv)
   uint32_t t0, t1, t2;
 
 
-  integer x1, y1, z1, x2, y2, z2, i, temp;   
+  integer x1, y1, z1, x2, y2, z2;   
   integer w1;
 
   // ROTATION, SIN
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
   gdirection = ROTATION; gmode = CIRCULAR;
   x1 = cordic_1K; y1 = 0;
 
-  for (i = 0; i < length; i++) {
+  for (int i = 0; i < length; i++) {
     z1 = source_array[i];
     cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
     destination_array_SW[i] = y2;

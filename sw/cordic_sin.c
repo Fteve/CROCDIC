@@ -151,22 +151,31 @@ int main(int argc, char **argv)
 
 
   // Verify that software result is equal to hardware result and print error message otherwise
+  int mismatch_counter = 0;
   for (int i = 0; i < length; i++) {
     if (destination_array_SW[i] != destination_array_HW[i]) {
+      mismatch_counter++;
       printf("!!MISMATCH BETWEEN SW AND HW RESULT at index position 0x%x!!\n", i);
 
-      while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
+      // while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
     }
   }
+  printf("Total mismatches: %x\n", mismatch_counter);
 
-  printf("SOFTWARE RESULTS\n");
-  for (int i = 0; i < length; i++) {
-    printf("SW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_SW[i]);
-  }
+  // printf("SOFTWARE RESULTS\n");
+  // for (int i = 0; i < length; i++) {
+  //   printf("SW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_SW[i]);
+  // }
 
-  printf("HARDWARE RESULTS\n");
+  // printf("HARDWARE RESULTS\n");
+  // for (int i = 0; i < length; i++) {
+  //   printf("HW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_HW[i]);
+  // }
+
+  printf("SOFTWARE AND HARDWARE RESULTS\n");
   for (int i = 0; i < length; i++) {
-    printf("HW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_HW[i]);
+    printf("SW:: Index: [0x%x], Inputs: 0x%x, 0x%x, Output: 0x%x\n", i, source_array[i], source_array[i+1], destination_array_SW[i]);
+    printf("HW:: Index: [0x%x], Inputs: 0x%x, 0x%x, Output: 0x%x\n", i, source_array[i], source_array[i+1], destination_array_HW[i]);
   }
 
   printf("Software implementation took 0x%x cycles\n", t1-t0);

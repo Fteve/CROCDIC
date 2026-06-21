@@ -129,9 +129,9 @@ module crocdic_top import user_pkg::*; #(
     IDLE, 
     READ_ELEMENTS,
     WAIT_READ_RESPONSE,
-    START_CORDIC, 
-    DUAL_INPUT_LOAD_0,
-    DUAL_INPUT_LOAD_1,
+    SINGLE_INPUT_LOAD,
+    DUAL_INPUT_LOAD,
+    START_CORDIC,
     WAIT_CORDIC,
     WRITE_ELEMENTS,
     WAIT_WRITE_RESPONSE,
@@ -154,11 +154,13 @@ module crocdic_top import user_pkg::*; #(
   `FF(destination_array_address_q, destination_array_address_d, '0);
 
   // Register to hold elements to be processed and count how many elements have been processed so far
-  logic [MgrObiCfg.DataWidth-1:0] elements_d, elements_q, elements_0, elements_1;  // one set of registers can be used to store both source and destination elements
+  logic [MgrObiCfg.DataWidth-1:0] elements_d, elements_q, elements_0_d, elements_0_q, elements_1_d, elements_1_q;  // one set of registers can be used to store both source and destination elements
   logic [MgrObiCfg.AddrWidth-1:0] element_counter_d, element_counter_q;
   logic which_input_d, which_input_q; //For assigning element to correct input of crocdic_cordic
 
   `FF(elements_q, elements_d, '0);
+  `FF(elements_0_q, elements_0_d, '0);
+  `FF(elements_1_q, elements_1_d, '0);
   `FF(element_counter_q, element_counter_d, '0);
   `FF(which_input_q, which_input_d, '0);
 
@@ -175,8 +177,6 @@ module crocdic_top import user_pkg::*; #(
     mgr_be = '0;
     mgr_wdata = '0;
     mgr_aid = '0;
-    elements_0 = '0;
-    elements_1 = '0;
     cordic_en_0 = '0;
     cordic_en_1 = '0;
     state_d = state_q;
@@ -185,6 +185,8 @@ module crocdic_top import user_pkg::*; #(
     number_of_elements_d = number_of_elements_q;
     destination_array_address_d = destination_array_address_q;
     elements_d = elements_q;
+    elements_0_d = elements_0_q;
+    elements_1_d = elements_0_q;
     element_counter_d = element_counter_q;
     which_input_d = which_input_q;
 
@@ -231,7 +233,7 @@ module crocdic_top import user_pkg::*; #(
       end
       READ_ELEMENTS: begin
         mgr_req = '1;
-        mgr_addr = source_array_address_q + 2 * element_counter_q;
+        mgr_addr = ((operation_q == ATAN || operation_q == SQRT) && which_input_q == 1) ? source_array_address_q + 2 * (element_counter_q + 2) : source_array_address_q + 2 * element_counter_q;
 
         if (element_counter_q + 1 == number_of_elements_q) begin  // only read 1 element if only 1 more element needs to be read instead of two
           mgr_be = 4'b0011;
@@ -248,46 +250,39 @@ module crocdic_top import user_pkg::*; #(
         if (mgr_rvalid_q) begin
           elements_d = mgr_rdata_q;
 
-          state_d = START_CORDIC;
-        end
-      end
-      START_CORDIC: begin //Read two elements per cordic module for ATAN and SQRT. Input array needs to be alternating x and y values in SW
-        if (operation_q == ATAN || operation_q == SQRT) begin
-          if (which_input_q == 0) begin
-            state_d = DUAL_INPUT_LOAD_0;
-          end else begin
-            state_d = DUAL_INPUT_LOAD_1;
+          if (operation_q == ATAN || operation_q == SQRT) begin
+            state_d = DUAL_INPUT_LOAD;
+          end else begin 
+            state_d = SINGLE_INPUT_LOAD;
           end
-        end else begin //For all other operations, single input per cordic module
-          elements_0 [15:0] = elements_q [15:0];
-          elements_1 [15:0] = elements_q [31:16];
-          cordic_en_0 = 1;
-          cordic_en_1 = 1;
-
-          state_d = WAIT_CORDIC;
-        end  
-      end
-      DUAL_INPUT_LOAD_0: begin
-        elements_0 = elements_q;
-
-        if (element_counter_q + 2 == number_of_elements_q) begin //Only use one cordic module if only one calculation left
-          cordic_en_0 = 1;
-          cordic_en_1 = 1; //Start both cordic modules but only write one of the results
-          state_d = WAIT_CORDIC;
-        end else begin
-          element_counter_d = element_counter_q + 2; //Read next 2 elements for the other cordic module
-          state_d =  READ_ELEMENTS;
-          which_input_d = 1;
         end
-        
       end
-      DUAL_INPUT_LOAD_1: begin
-        elements_1 = elements_q;
-        which_input_d = 0;
+      SINGLE_INPUT_LOAD: begin
+        elements_0_d [15:0] = elements_q [15:0];
+        elements_1_d [15:0] = elements_q [31:16];
+        state_d = START_CORDIC;
+      end
+      DUAL_INPUT_LOAD: begin //Read two elements per cordic module for ATAN and SQRT. Input array needs to be alternating x and y values in SW
+        if (which_input_q == 0) begin //Load first cordic module inputs
+          elements_0_d = elements_q;
+
+          if (element_counter_q + 2 == number_of_elements_q) begin //Only use one cordic module if only one calculation left
+            state_d = START_CORDIC;
+
+          end else begin
+            which_input_d = 1;
+            state_d =  READ_ELEMENTS; //Read next 2 elements for the other cordic module
+          end
+        end else begin //Load second cordic module inputs
+          elements_1_d = elements_q;
+          which_input_d = 0;
+          state_d = START_CORDIC; //Wait for both cordic modules to finish
+        end
+      end
+      START_CORDIC: begin
         cordic_en_0 = 1;
         cordic_en_1 = 1;
-
-        state_d = WAIT_CORDIC; //Wait for both cordic modules to finish
+        state_d = WAIT_CORDIC;
       end
       WAIT_CORDIC: begin
         if (cordic_done_0) begin
@@ -322,9 +317,9 @@ module crocdic_top import user_pkg::*; #(
       WAIT_WRITE_RESPONSE: begin
         if (mgr_rvalid_q) begin
 
-          element_counter_d = element_counter_q + 2;  // increment element counter by 2 since 2 elements are being processed at once
+          element_counter_d = (operation_q == ATAN || operation_q == SQRT) ? element_counter_q + 4 : element_counter_q + 2;  // increment element counter by 2 since 2 elements are being processed at once, 4 for dual input calculations
 
-          if (element_counter_d >= number_of_elements_q) begin
+          if (element_counter_q + 2 >= number_of_elements_q) begin
             state_d = DONE;
           end else begin
             state_d = READ_ELEMENTS;
@@ -351,8 +346,8 @@ module crocdic_top import user_pkg::*; #(
     .clk_i (clk_i),
     .rst_ni (rst_ni),
     .cordic_en_i (cordic_en_0),
-    .input_element_0_i (elements_0[15:0]), //Only use input_element_0_i for SIN, COS, RECIPROCAL, input_element_0_1_i remains default value
-    .input_element_1_i (elements_0[31:16]),
+    .input_element_0_i (elements_0_q[15:0]), //Only use input_element_0_i for SIN, COS, RECIPROCAL, input_element_0_1_i remains default value
+    .input_element_1_i (elements_0_q[31:16]),
     .operation_i (operation_q),
 
     .cordic_done_o (cordic_done_0),
@@ -363,8 +358,8 @@ module crocdic_top import user_pkg::*; #(
     .clk_i (clk_i),
     .rst_ni (rst_ni),
     .cordic_en_i (cordic_en_1),
-    .input_element_0_i (elements_1[15:0]),
-    .input_element_1_i (elements_1[31:16]),
+    .input_element_0_i (elements_1_q[15:0]),
+    .input_element_1_i (elements_1_q[31:16]),
     .operation_i (operation_q),
 
     .cordic_done_o (cordic_done_1),

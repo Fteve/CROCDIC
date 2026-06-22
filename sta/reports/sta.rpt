@@ -1,0 +1,63 @@
+Startpoint: i_croc_soc/i_croc/i_core_wrap/i_core.id_stage_i.controller_i.instr_i_0__reg
+            (rising edge-triggered flip-flop clocked by clk_sys)
+Endpoint: i_croc_soc/i_croc/gen_sram_bank[1].i_sram/gen_512x32xBx1.i_cut
+          (rising edge-triggered flip-flop clocked by clk_sys)
+Path Group: clk_sys
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock clk_sys (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00 ^ i_croc_soc/i_croc/i_core_wrap/i_core.id_stage_i.controller_i.instr_i_0__reg/CK (DFFRQX3)
+   0.29    0.29 ^ i_croc_soc/i_croc/i_core_wrap/i_core.id_stage_i.controller_i.instr_i_0__reg/Q (DFFRQX3)
+   0.47    0.76 ^ i_croc_soc/i_croc/i_core_wrap/_4009_/Y (NOR4BBX2)
+   0.17    0.93 v i_croc_soc/i_croc/i_core_wrap/_4016_/Y (NAND2X2)
+   0.28    1.22 ^ i_croc_soc/i_croc/i_core_wrap/_4307_/Y (AOI211X2)
+   0.25    1.46 v i_croc_soc/i_croc/i_core_wrap/_4311_/Y (OAI211X2)
+   0.31    1.77 ^ i_croc_soc/i_croc/i_core_wrap/_4463_/Y (AOI211X2)
+   0.29    2.06 v i_croc_soc/i_croc/i_core_wrap/_4545_/Y (AOAI211X2)
+   0.29    2.35 ^ i_croc_soc/i_croc/i_core_wrap/_4552_/Y (XOR2X2)
+   0.14    2.49 v i_croc_soc/i_croc/i_core_wrap/_4643_/Y (NAND2X1)
+   0.20    2.69 ^ i_croc_soc/i_croc/i_core_wrap/_4646_/Y (NOR4X1)
+   0.14    2.83 v i_croc_soc/i_croc/i_core_wrap/_4647_/Y (MUXI2X1)
+   0.22    3.05 ^ i_croc_soc/i_croc/i_core_wrap/_4830_/Y (OAI31X2)
+   0.21    3.26 ^ i_croc_soc/i_croc/i_core_wrap/_4874_/Y (AO31X1)
+   0.12    3.38 ^ i_croc_soc/i_croc/i_core_wrap/_4875_/Y (BUFX6)
+   0.18    3.56 v i_croc_soc/i_croc/i_core_wrap/_5041_/Y (AOI21X1)
+   0.17    3.73 v i_croc_soc/i_croc/i_core_wrap/_5129_/Y (MUX2X1)
+   0.11    3.84 ^ i_croc_soc/i_croc/i_core_wrap/_5131_/Y (MUXI2X1)
+   0.21    4.05 ^ i_croc_soc/i_croc/i_core_wrap/_5132_/Y (XOR2X2)
+   0.14    4.19 v i_croc_soc/i_croc/i_core_wrap/_5996_/Y (AOI211X1)
+   0.29    4.47 ^ i_croc_soc/i_croc/i_core_wrap/_7026_/Y (OAI31X1)
+   0.25    4.72 ^ i_croc_soc/i_croc/i_core_wrap/_7313_/Y (MUX2X1)
+   0.16    4.89 ^ i_croc_soc/i_croc/_3181_/Y (NOR4BX1)
+   0.28    5.16 ^ i_croc_soc/i_croc/_3182_/Y (AND4X2)
+   0.18    5.34 v i_croc_soc/i_croc/_3202_/Y (NAND3X1)
+   0.11    5.44 ^ i_croc_soc/i_croc/_3203_/Y (XOR2X2)
+   0.14    5.58 v i_croc_soc/i_croc/_3204_/Y (OAI211X2)
+   0.18    5.76 v i_croc_soc/i_croc/_4640_/Y (AO21X2)
+   0.20    5.96 ^ i_croc_soc/i_croc/_4928_/Y (NOR4X1)
+   0.11    6.07 v i_croc_soc/i_croc/_4929_/Y (NAND2X1)
+   0.17    6.24 ^ i_croc_soc/i_croc/_4931_/Y (OAI21X1)
+   0.14    6.38 ^ i_croc_soc/i_croc/_4937_/Y (OR2X2)
+   0.18    6.56 v i_croc_soc/i_croc/_5102_/Y (AOI21BX1)
+   0.17    6.74 v i_croc_soc/i_croc/_5109_/Y (BUFX3)
+   0.11    6.85 v i_croc_soc/i_croc/_5110_/Y (OA211X2)
+   0.36    7.20 ^ i_croc_soc/i_croc/_5111_/Y (AOI21X1)
+   0.00    7.20 ^ i_croc_soc/i_croc/gen_sram_bank[1].i_sram/gen_512x32xBx1.i_cut/A_BM[0] (RM_IHPSG13_1P_512x32_c2_bm_bist)
+           7.20   data arrival time
+
+  20.00   20.00   clock clk_sys (rise edge)
+   0.00   20.00   clock network delay (ideal)
+   0.00   20.00   clock reconvergence pessimism
+          20.00 ^ i_croc_soc/i_croc/gen_sram_bank[1].i_sram/gen_512x32xBx1.i_cut/A_CLK (RM_IHPSG13_1P_512x32_c2_bm_bist)
+  -3.34   16.66   library setup time
+          16.66   data required time
+---------------------------------------------------------
+          16.66   data required time
+          -7.20   data arrival time
+---------------------------------------------------------
+           9.45   slack (MET)
+
+

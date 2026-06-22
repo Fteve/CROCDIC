@@ -61,7 +61,7 @@ integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 
 
 // source array of values in Q2.14 format to be computed
-// For ATAN, alternate 2 x-values, 2 corresponding y-values
+// For ATAN, organized in (x1,y1) pairs
 // integer source_array[18] =  {0, 0, 0, 500, 3500, 5500, 3500, 6000, 6500, 3500, 7000, 6000, 7000, 6500, 7000, 7000, 2500, 5000};
 integer source_array[128] = {0, 0, 0, 1000, 0, 2000, 0, 3000, 0, 4000, 0, 5000, 0, 6000, 0, 7000, 1000, 0, 1000, 1000, 1000, 2000, 1000, 3000, 1000, 4000, 1000, 5000, 1000, 6000, 1000, 7000, 2000, 0, 2000, 1000, 2000, 2000, 2000, 3000, 2000, 4000, 2000, 5000, 2000, 6000, 2000, 7000, 3000, 0, 3000, 1000, 3000, 2000, 3000, 3000, 3000, 4000, 3000, 5000, 3000, 6000, 3000, 7000, 4000, 0, 4000, 1000, 4000, 2000, 4000, 3000, 4000, 4000, 4000, 5000, 4000, 6000, 4000, 7000, 5000, 0, 5000, 1000, 5000, 2000, 5000, 3000, 5000, 4000, 5000, 5000, 5000, 6000, 5000, 7000, 6000, 0, 6000, 1000, 6000, 2000, 6000, 3000, 6000, 4000, 6000, 5000, 6000, 6000, 6000, 7000, 7000, 0, 7000, 1000, 7000, 2000, 7000, 3000, 7000, 4000, 7000, 5000, 7000, 6000, 7000, 7000};
 
@@ -178,8 +178,8 @@ int main(int argc, char **argv)
 
   printf("SOFTWARE AND HARDWARE RESULTS\n");
   for (int i = 0; i < length/2; i++) {
-    printf("SW:: Index: [0x%x], Inputs: 0x%x, 0x%x, Output: 0x%x\n", i, source_array[2*i], source_array[2*i+1], destination_array_SW[i]);
-    printf("HW:: Index: [0x%x], Inputs: 0x%x, 0x%x, Output: 0x%x\n", i, source_array[2*i], source_array[2*i+1], destination_array_HW[i]);
+    printf("SW:: Index: [0x%x], Input: 0x%x/0x%x, Output: 0x%x\n", i, source_array[2*i+1], source_array[2*i], destination_array_SW[i]);
+    printf("HW:: Index: [0x%x], Input: 0x%x/0x%x, Output: 0x%x\n", i, source_array[2*i+1], source_array[2*i], destination_array_HW[i]);
   }
 
   printf("Software implementation took 0x%x cycles\n", t1-t0);

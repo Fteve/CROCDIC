@@ -233,7 +233,7 @@ module crocdic_top import user_pkg::*; #(
       end
       READ_ELEMENTS: begin
         mgr_req = '1;
-        mgr_addr = ((operation_q == ATAN || operation_q == SQRT) && which_input_q == 1) ? source_array_address_q + 2 * (element_counter_q + 2) : source_array_address_q + 2 * element_counter_q;
+        mgr_addr = (operation_q == ATAN && which_input_q == 1) ? source_array_address_q + 2 * (element_counter_q + 2) : source_array_address_q + 2 * element_counter_q;
 
         if (element_counter_q + 1 == number_of_elements_q) begin  // only read 1 element if only 1 more element needs to be read instead of two
           mgr_be = 4'b0011;
@@ -250,7 +250,7 @@ module crocdic_top import user_pkg::*; #(
         if (mgr_rvalid_q) begin
           elements_d = mgr_rdata_q;
 
-          if (operation_q == ATAN || operation_q == SQRT) begin
+          if (operation_q == ATAN) begin
             state_d = DUAL_INPUT_LOAD;
           end else begin 
             state_d = SINGLE_INPUT_LOAD;
@@ -262,7 +262,7 @@ module crocdic_top import user_pkg::*; #(
         elements_1_d [15:0] = elements_q [31:16];
         state_d = START_CORDIC;
       end
-      DUAL_INPUT_LOAD: begin //Read two elements per cordic module for ATAN and SQRT. Input array needs to be alternating x and y values in SW
+      DUAL_INPUT_LOAD: begin //Read two elements per cordic module for ATAN. Input array needs to be alternating x and y values in SW
         if (which_input_q == 0) begin //Load first cordic module inputs
           elements_0_d = elements_q;
 
@@ -300,11 +300,11 @@ module crocdic_top import user_pkg::*; #(
       end
       WRITE_ELEMENTS: begin
         mgr_req = '1;
-        mgr_addr = (operation_q == ATAN || operation_q == SQRT) ? destination_array_address_q + element_counter_q : destination_array_address_q + 2 * element_counter_q;
+        mgr_addr = (operation_q == ATAN) ? destination_array_address_q + element_counter_q : destination_array_address_q + 2 * element_counter_q;
         mgr_we = '1;
         mgr_wdata = elements_q;
 
-        if (element_counter_q + 1 == number_of_elements_q || ((operation_q == ATAN || operation_q == SQRT) && element_counter_q + 2 == number_of_elements_q)) begin  // only write 1 element if only 1 more element needs to be written instead of two
+        if (element_counter_q + 1 == number_of_elements_q || (operation_q == ATAN && element_counter_q + 2 == number_of_elements_q)) begin  // only write 1 element if only 1 more element needs to be written instead of two
           mgr_be = 4'b0011;
         end else begin  // write both 16-bit elements if more than 1 element still needs to be written
           mgr_be = '1;
@@ -317,7 +317,7 @@ module crocdic_top import user_pkg::*; #(
       WAIT_WRITE_RESPONSE: begin
         if (mgr_rvalid_q) begin
 
-          element_counter_d = (operation_q == ATAN || operation_q == SQRT) ? element_counter_q + 4 : element_counter_q + 2;  // increment element counter by 2 since 2 elements are being processed at once, 4 for dual input calculations
+          element_counter_d = (operation_q == ATAN) ? element_counter_q + 4 : element_counter_q + 2;  // increment element counter by 2 since 2 elements are being processed at once, 4 for dual input calculations
 
           if (element_counter_q + 2 >= number_of_elements_q) begin
             state_d = DONE;

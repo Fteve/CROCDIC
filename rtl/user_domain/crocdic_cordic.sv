@@ -179,9 +179,14 @@ module crocdic_cordic import user_pkg::*; #(
             y_iteration_d = '0;
             z_iteration_d = input_element_0_i;
           end
-          ATAN, SQRT: begin
+          ATAN: begin
             x_iteration_d = input_element_0_i;
             y_iteration_d = input_element_1_i;
+            z_iteration_d = '0;
+          end
+          SQRT: begin
+            x_iteration_d = input_element_0_i + 16'd4096;
+            y_iteration_d = input_element_0_i - 16'd4096;
             z_iteration_d = '0;
           end
           RECIPROCAL: begin
@@ -247,7 +252,7 @@ module crocdic_cordic import user_pkg::*; #(
           output_element_o = z_iteration_q;
         end
         SQRT: begin
-          output_element_o =  CORDIC_1KP * x_iteration_q; // Remember to divide by MUL once in SW for Q2.14 form, twice for normal decimal form
+          output_element_o =  (CORDIC_1KP/MUL) * x_iteration_q; // This is in Q2.14 form. Divide again by MUL in SW for normal decimal form.
         end
         RECIPROCAL: begin
           output_element_o = z_iteration_q; 

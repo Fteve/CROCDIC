@@ -172,9 +172,9 @@ int main(int argc, char **argv)
   // }
 
   printf("SOFTWARE AND HARDWARE RESULTS\n");
-  for (int i = 0; i < length/2; i++) {
-    printf("SW:: Index: [0x%x], Inputs: 0x%x, 0x%x, Output: 0x%x\n", i, source_array[2*i], source_array[2*i+1], destination_array_SW[i]);
-    printf("HW:: Index: [0x%x], Inputs: 0x%x, 0x%x, Output: 0x%x\n", i, source_array[2*i], source_array[2*i+1], destination_array_HW[i]);
+  for (int i = 0; i < length; i++) {
+    printf("SW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_SW[i]);
+    printf("HW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_HW[i]);
   }
 
   printf("Software implementation took 0x%x cycles\n", t1-t0);

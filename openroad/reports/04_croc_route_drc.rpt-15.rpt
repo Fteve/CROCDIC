@@ -1,0 +1,42 @@
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_core_wrap/_1138_ net:i_croc_soc/i_croc/i_core_wrap/i_core.crash_dump_o_55_
+	bbox = (1250.2300, 1083.4950) - (1250.4050, 1083.6450) on Layer Metal1
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_core_wrap/_1138_ net:i_croc_soc/i_croc/i_core_wrap/i_core.crash_dump_o_55_
+	bbox = (1250.2300, 1083.4950) - (1250.4050, 1083.7050) on Layer Metal1
+violation type: Metal Spacing
+	srcs: net:clknet_0_soc_clk_i_regs net:net6762
+	bbox = (1290.1300, 1181.3650) - (1290.3500, 1181.5650) on Layer Metal2
+violation type: Metal Spacing
+	srcs: net:clknet_0_soc_clk_i_regs net:net6762
+	bbox = (1290.1300, 1181.3150) - (1290.3500, 1181.6050) on Layer Metal2
+violation type: Metal Spacing
+	srcs: net:net6762 net:i_croc_soc/i_croc/i_core_wrap/_0941_
+	bbox = (1288.2400, 1180.3000) - (1288.2500, 1180.4750) on Layer Metal2
+violation type: Metal Spacing
+	srcs: net:net7404 net:net6882
+	bbox = (993.1650, 1341.9200) - (993.3650, 1342.0000) on Layer Metal2
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_main_xbar.gen_demux\[3\].i_demux.i_counter.q_o
+	bbox = (1068.4150, 1150.8700) - (1068.5850, 1150.9050) on Layer Metal1
+violation type: Metal Spacing
+	srcs: net:net7402
+	bbox = (1039.8100, 1321.7600) - (1040.0050, 1322.0050) on Layer Metal2
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_soc_ctrl/_118_
+	bbox = (972.1900, 921.7950) - (972.3650, 922.0050) on Layer Metal1
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_dmi_jtag/dtmcs_q_5_
+	bbox = (380.0350, 1070.2300) - (380.2050, 1070.2650) on Layer Metal1
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_core_wrap/i_core.if_stage_i.prefetch_buffer_i.fetch_addr_q_25_
+	bbox = (1112.5150, 1043.3500) - (1112.6850, 1043.3850) on Layer Metal1
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_core_wrap/i_core.if_stage_i.prefetch_buffer_i.fetch_addr_q_10_
+	bbox = (1103.6950, 1123.9900) - (1103.8650, 1124.0250) on Layer Metal1
+violation type: Short
+	srcs: net:i_croc_soc/i_croc/i_core_wrap/_1138_ net:net7388
+	bbox = (1249.6700, 1083.8250) - (1249.8100, 1084.1150) on Layer Metal2
+violation type: Short
+	srcs: net:i_croc_soc/i_croc/i_core_wrap/_1138_ net:net7388
+	bbox = (1249.6700, 1083.9150) - (1249.8100, 1084.1150) on Layer Metal2

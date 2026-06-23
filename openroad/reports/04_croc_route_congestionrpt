@@ -1,0 +1,4 @@
+violation type: Horizontal congestion
+	srcs: net:i_croc_soc/i_croc/i_core_wrap/_0672_ net:net5093 net:i_croc_soc/i_croc/i_core_wrap/_0782_ net:i_croc_soc/i_croc/i_core_wrap/_1027_ net:i_croc_soc/i_croc/i_core_wrap/_1069_ net:i_croc_soc/i_croc/i_core_wrap/_1496_ net:net8648 net:i_croc_soc/i_croc/i_core_wrap/i_core.crash_dump_o_55_ net:i_croc_soc/i_croc/i_core_wrap/i_core.crash_dump_o_57_ net:net2757 net:net8594 net:net8604 net:clknet_0_soc_clk_i_regs
+	comment: capacity:14 usage:15 overflow:1
+	bbox = (598.5000, 1121.4000) - (604.8000, 1127.7000) on Layer -

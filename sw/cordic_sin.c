@@ -116,7 +116,6 @@ int main(int argc, char **argv)
   char str[32];
 
   integer x1, y1, z1, x2, y2, z2;   
-  integer w1;
 
   for (int i = 0; i < 32; i++) {
         four_characters = *reg32(USER_ROM_BASE_ADDR, i*4);

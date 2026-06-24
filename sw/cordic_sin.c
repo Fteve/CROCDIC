@@ -161,18 +161,19 @@ int main(int argc, char **argv)
       // while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
     }
   }
+
+  // Report result summary
+  printf("Software implementation took 0x%x cycles\n", t1-t0);
+  printf("Hardware implementation took 0x%x cycles\n", t2-t1);
   printf("Total number of mismatches: 0x%x\n", mismatch_counter);
 
   // (can differ due to printf bug for large arrays)
-  printf("SOFTWARE AND HARDWARE RESULTS\n");
+  printf("SOFTWARE AND HARDWARE RESULTS (can differ due to printf bug for large arrays)\n");
   for (int i = 0; i < length; i++) {
     printf("SW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_SW[i]);
     printf("HW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_HW[i]);
   }
 
-  // Report result summary
-  printf("Software implementation took 0x%x cycles\n", t1-t0);
-  printf("Hardware implementation took 0x%x cycles\n", t2-t1);
   
   uart_write_flush();
 

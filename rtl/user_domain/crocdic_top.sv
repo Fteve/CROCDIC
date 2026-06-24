@@ -335,7 +335,7 @@ module crocdic_top import user_pkg::*; #(
     .clk_i (clk_i),
     .rst_ni (rst_ni),
     .cordic_en_i (cordic_en_0),
-    .input_element_0_i (elements_0_q[15:0]), //Only use input_element_0_i for SIN, COS, RECIPROCAL, input_element_0_1_i remains default value
+    .input_element_0_i (elements_0_q[15:0]), //Only use input_element_0_i for SIN, COS, RECIPROCAL, SQRT, input_element_0_1_i remains default value
     .input_element_1_i (elements_0_q[31:16]),
     .operation_i (operation_q),
 

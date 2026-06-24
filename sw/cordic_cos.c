@@ -161,6 +161,7 @@ int main(int argc, char **argv)
       // while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
     }
   }
+  printf("Total number of mismatches: 0x%x\n", mismatch_counter);
 
   // (can differ due to printf bug for large arrays)
   printf("SOFTWARE AND HARDWARE RESULTS\n");
@@ -172,8 +173,7 @@ int main(int argc, char **argv)
   // Report result summary
   printf("Software implementation took 0x%x cycles\n", t1-t0);
   printf("Hardware implementation took 0x%x cycles\n", t2-t1);
-  printf("Total number of mismatches: 0x%x\n", mismatch_counter);
-  
+
   uart_write_flush();
 
   return 0;

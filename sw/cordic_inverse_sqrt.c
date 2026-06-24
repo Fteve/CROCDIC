@@ -63,6 +63,7 @@ integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 // source array of values in Q2.14 format to be computed
 integer source_array[62] = {4000, 4400, 4800, 5200, 5600, 6000, 6400, 6800, 7200, 7600, 8000, 8400, 8800, 9200, 9600, 10000, 10400, 10800, 11200, 11600, 12000, 12400, 12800, 13200, 13600, 14000, 14400, 14800, 15200, 15600, 16000, 16400, 16800, 17200, 17600, 18000, 18400, 18800, 19200, 19600, 20000, 20400, 20800, 21200, 21600, 22000, 22400, 22800, 23200, 23600, 24000, 24400, 24800, 25200, 25600, 26000, 26400, 26800, 27200, 27600, 28000, 28400};
 
+// destination array of values in Q2.14 format
 integer destination_array_SW[62];
 integer destination_array_HW[62];
 
@@ -128,7 +129,7 @@ int main(int argc, char **argv)
 
     gdirection = VECTORING; gmode = LINEAR; //RECIPROCAL
     y1 = (1<<14);
-    x1 = (CORDIC_1KP/MUL)*x2;
+    x1 = (CORDIC_1KP*x2)/MUL;  // multiplication first and division second to preserve precision
     cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
     destination_array_SW[i] = z2;
   }
@@ -152,8 +153,8 @@ int main(int argc, char **argv)
 
   *(volatile uint32_t *)CROCDIC_OPERATION = RECIPROCAL;
   *(volatile uint32_t *)CROCDIC_SOURCE_ARRAY_ADDRESS = (uint32_t)destination_array_HW; //Use previous results as source array and overwrite with new results
-  *(volatile uint32_t *)CROCDIC_NR_OF_ELEMENTS = length;
-  *(volatile uint32_t *)CROCDIC_DESTINATION_ARRAY_ADDRESS = (uint32_t)destination_array_HW;
+  //*(volatile uint32_t *)CROCDIC_NR_OF_ELEMENTS = length;  // not needed as it is already being set before and stays the same
+  //*(volatile uint32_t *)CROCDIC_DESTINATION_ARRAY_ADDRESS = (uint32_t)destination_array_HW;  // not needed as it is already being set before and stays the same
  
   // start crocdic_top by writing something to the start_address
   *(volatile uint32_t *)CROCDIC_START = 0xDEADBEEF;
@@ -178,27 +179,19 @@ int main(int argc, char **argv)
       // while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
     }
   }
-  printf("Total mismatches: %x\n", mismatch_counter);
+  printf("Total number of mismatches: 0x%x\n", mismatch_counter);
 
-  // printf("SOFTWARE RESULTS\n");
-  // for (int i = 0; i < length; i+=2) {
-  //   printf("SW:: Inputs: 0x%x, 0x%x, Output: 0x%x\n", source_array[i], source_array[i+1], destination_array_SW[i/2]);
-  // }
-
-  // printf("HARDWARE RESULTS\n");
-  // for (int i = 0; i < length; i+=2) {
-  //   printf("HW:: Inputs: 0x%x, 0x%x, Output: 0x%x\n", source_array[i], source_array[i+1], destination_array_HW[i/2]);
-  // }
-
+  // (can differ due to printf bug for large arrays)
   printf("SOFTWARE AND HARDWARE RESULTS\n");
   for (int i = 0; i < length; i++) {
     printf("SW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_SW[i]);
     printf("HW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_HW[i]);
   }
 
+  // Report result summary
   printf("Software implementation took 0x%x cycles\n", t1-t0);
   printf("Hardware implementation took 0x%x cycles\n", t2-t1);
-  
+
   uart_write_flush();
 
   return 0;

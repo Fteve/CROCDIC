@@ -63,6 +63,7 @@ integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 // source array of values in Q2.14 format to be computed
 integer source_array[70] = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600, 3700, 3800, 3900, 4000, 4100, 4200, 4300, 4400, 4500, 4600, 4700, 4800, 4900, 5000, 5100, 5200, 5300, 5400, 5500, 5600, 5700, 5800, 5900, 6000, 6100, 6200, 6300, 6400, 6500, 6600, 6700, 6800, 6900, 7000};
 
+// destination array of values in Q2.14 format
 integer destination_array_SW[70];
 integer destination_array_HW[70];
 
@@ -126,7 +127,7 @@ int main(int argc, char **argv)
     x1 = source_array[i] + (1<<12);
     y1 = source_array[i] - (1<<12);
     cordic(gdirection, gmode, x1, y1, z1, &x2, &y2, &z2);
-    destination_array_SW[i] = (CORDIC_1KP/MUL)*x2;
+    destination_array_SW[i] = (CORDIC_1KP*x2)/MUL;  // first multiply then divide to preserve precision
   }
 
   // RUN & BENCHMARK HARDWARE IMPLEMENTATION
@@ -159,27 +160,19 @@ int main(int argc, char **argv)
       // while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
     }
   }
-  printf("Total mismatches: %x\n", mismatch_counter);
+  printf("Total number of mismatches: 0x%x\n", mismatch_counter);
 
-  // printf("SOFTWARE RESULTS\n");
-  // for (int i = 0; i < length; i+=2) {
-  //   printf("SW:: Inputs: 0x%x, 0x%x, Output: 0x%x\n", source_array[i], source_array[i+1], destination_array_SW[i/2]);
-  // }
-
-  // printf("HARDWARE RESULTS\n");
-  // for (int i = 0; i < length; i+=2) {
-  //   printf("HW:: Inputs: 0x%x, 0x%x, Output: 0x%x\n", source_array[i], source_array[i+1], destination_array_HW[i/2]);
-  // }
-
+  // (can differ due to printf bug for large arrays)
   printf("SOFTWARE AND HARDWARE RESULTS\n");
   for (int i = 0; i < length; i++) {
     printf("SW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_SW[i]);
     printf("HW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_HW[i]);
   }
 
+  // Report result summary
   printf("Software implementation took 0x%x cycles\n", t1-t0);
   printf("Hardware implementation took 0x%x cycles\n", t2-t1);
-  
+
   uart_write_flush();
 
   return 0;

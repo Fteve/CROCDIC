@@ -63,6 +63,7 @@ integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 // source array of values in Q2.14 format to be computed
 integer source_array[50] =  {0, 514, 1029, 1544, 2058, 2573, 3088, 3603, 4117, 4632, 5147, 5661, 6176, 6691, 7206, 7720, 8235, 8750, 9264, 9779, 10294, 10809, 11323, 11838, 12353, 12867, 13382, 13897, 14412, 14926, 15441, 15956, 16470, 16985, 17500, 18015, 18529, 19044, 19559, 20074, 20588, 21103, 21618, 22132, 22647, 23162, 23677, 24191, 24706, 25221};
 
+// destination array of values in Q2.14 format
 integer destination_array_SW[50];
 integer destination_array_HW[50];
 
@@ -160,27 +161,19 @@ int main(int argc, char **argv)
       // while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
     }
   }
-  printf("Total mismatches: %x\n", mismatch_counter);
+  printf("Total number of mismatches: 0x%x\n", mismatch_counter);
 
-  // printf("SOFTWARE RESULTS\n");
-  // for (int i = 0; i < length; i++) {
-  //   printf("SW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_SW[i]);
-  // }
-
-  // printf("HARDWARE RESULTS\n");
-  // for (int i = 0; i < length; i++) {
-  //   printf("HW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_HW[i]);
-  // }
-
+  // (can differ due to printf bug for large arrays)
   printf("SOFTWARE AND HARDWARE RESULTS\n");
   for (int i = 0; i < length; i++) {
     printf("SW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_SW[i]);
     printf("HW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_HW[i]);
   }
 
+  // Report result summary
   printf("Software implementation took 0x%x cycles\n", t1-t0);
   printf("Hardware implementation took 0x%x cycles\n", t2-t1);
-  
+
   uart_write_flush();
 
   return 0;

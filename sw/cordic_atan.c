@@ -60,13 +60,11 @@ integer gdirection; // {0: ROTATION, 1: VECTORING}
 integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 
 
-// source array of values in Q2.14 format to be computed
+// source array of values in Q2.14 format format to be computed
 // For ATAN, organized in (x1,y1) pairs
-// integer source_array[18] =  {0, 0, 0, 500, 3500, 5500, 3500, 6000, 6500, 3500, 7000, 6000, 7000, 6500, 7000, 7000, 2500, 5000};
 integer source_array[128] = {0, 0, 0, 1000, 0, 2000, 0, 3000, 0, 4000, 0, 5000, 0, 6000, 0, 7000, 1000, 0, 1000, 1000, 1000, 2000, 1000, 3000, 1000, 4000, 1000, 5000, 1000, 6000, 1000, 7000, 2000, 0, 2000, 1000, 2000, 2000, 2000, 3000, 2000, 4000, 2000, 5000, 2000, 6000, 2000, 7000, 3000, 0, 3000, 1000, 3000, 2000, 3000, 3000, 3000, 4000, 3000, 5000, 3000, 6000, 3000, 7000, 4000, 0, 4000, 1000, 4000, 2000, 4000, 3000, 4000, 4000, 4000, 5000, 4000, 6000, 4000, 7000, 5000, 0, 5000, 1000, 5000, 2000, 5000, 3000, 5000, 4000, 5000, 5000, 5000, 6000, 5000, 7000, 6000, 0, 6000, 1000, 6000, 2000, 6000, 3000, 6000, 4000, 6000, 5000, 6000, 6000, 6000, 7000, 7000, 0, 7000, 1000, 7000, 2000, 7000, 3000, 7000, 4000, 7000, 5000, 7000, 6000, 7000, 7000};
 
-// integer destination_array_SW[9];
-// integer destination_array_HW[9];
+// destination array of values in Q2.14 format
 integer destination_array_SW[64];
 integer destination_array_HW[64];
 
@@ -118,7 +116,7 @@ int main(int argc, char **argv)
   integer x1, y1, z1, x2, y2, z2;   
   integer w1;
 
-  // ROTATION, SIN
+  // ATAN
   printf("ATAN\n");
 
   // RUN & BENCHMARK SOFTWARE IMPLEMENTATION
@@ -161,32 +159,25 @@ int main(int argc, char **argv)
       mismatch_counter++;
       printf("!!MISMATCH BETWEEN SW AND HW RESULT at index position 0x%x!!\n", i);
 
-      // while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
+      //while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
     }
   }
-  printf("Total mismatches: %x\n", mismatch_counter);
+  printf("Total number of mismatches: 0x%x\n", mismatch_counter);
 
-  // printf("SOFTWARE RESULTS\n");
-  // for (int i = 0; i < length; i+=2) {
-  //   printf("SW:: Inputs: 0x%x, 0x%x, Output: 0x%x\n", source_array[i], source_array[i+1], destination_array_SW[i/2]);
-  // }
-
-  // printf("HARDWARE RESULTS\n");
-  // for (int i = 0; i < length; i+=2) {
-  //   printf("HW:: Inputs: 0x%x, 0x%x, Output: 0x%x\n", source_array[i], source_array[i+1], destination_array_HW[i/2]);
-  // }
-
+  // (can differ due to printf bug for large arrays)
   printf("SOFTWARE AND HARDWARE RESULTS\n");
   for (int i = 0; i < length/2; i++) {
-    printf("SW:: Index: [0x%x], Input: 0x%x/0x%x, Output: 0x%x\n", i, source_array[2*i+1], source_array[2*i], destination_array_SW[i]);
-    printf("HW:: Index: [0x%x], Input: 0x%x/0x%x, Output: 0x%x\n", i, source_array[2*i+1], source_array[2*i], destination_array_HW[i]);
+    printf("SW:: Index: [0x%x], Input: 0x%x/0x%x, Output: 0x%x\n", i, (unsigned int)(uint16_t)source_array[2*i+1], (unsigned int)(uint16_t)source_array[2*i], (unsigned int)(uint16_t)destination_array_SW[i]);
+    printf("HW:: Index: [0x%x], Input: 0x%x/0x%x, Output: 0x%x\n", i, (unsigned int)(uint16_t)source_array[2*i+1], (unsigned int)(uint16_t)source_array[2*i], (unsigned int)(uint16_t)destination_array_HW[i]);
   }
 
+  // Report result summary
   printf("Software implementation took 0x%x cycles\n", t1-t0);
   printf("Hardware implementation took 0x%x cycles\n", t2-t1);
-  
+
   uart_write_flush();
 
   return 0;
 
 }
+

@@ -63,6 +63,7 @@ integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 // source array of values in Q2.14 format to be computed
 integer source_array[96] = {32000, 31750, 31500, 31250, 31000, 30750, 30500, 30250, 30000, 29750, 29500, 29250, 29000, 28750, 28500, 28250, 28000, 27750, 27500, 27250, 27000, 26750, 26500, 26250, 26000, 25750, 25500, 25250, 25000, 24750, 24500, 24250, 24000, 23750, 23500, 23250, 23000, 22750, 22500, 22250, 22000, 21750, 21500, 21250, 21000, 20750, 20500, 20250, 20000, 19750, 19500, 19250, 19000, 18750, 18500, 18250, 18000, 17750, 17500, 17250, 17000, 16750, 16500, 16250, 16000, 15750, 15500, 15250, 15000, 14750, 14500, 14250, 14000, 13750, 13500, 13250, 13000, 12750, 12500, 12250, 12000, 11750, 11500, 11250, 11000, 10750, 10500, 10250, 10000, 9750, 9500, 9250, 9000, 8750, 8500, 8250};
 
+// destination array of values in Q2.14 format
 integer destination_array_SW[96];
 integer destination_array_HW[96];
 
@@ -159,27 +160,19 @@ int main(int argc, char **argv)
       // while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
     }
   }
-  printf("Total mismatches: %x\n", mismatch_counter);
+  printf("Total number of mismatches: 0x%x\n", mismatch_counter);
 
-  // printf("SOFTWARE RESULTS\n");
-  // for (int i = 0; i < length; i+=2) {
-  //   printf("SW:: Inputs: 0x%x, 0x%x, Output: 0x%x\n", source_array[i], source_array[i+1], destination_array_SW[i/2]);
-  // }
-
-  // printf("HARDWARE RESULTS\n");
-  // for (int i = 0; i < length; i+=2) {
-  //   printf("HW:: Inputs: 0x%x, 0x%x, Output: 0x%x\n", source_array[i], source_array[i+1], destination_array_HW[i/2]);
-  // }
-
+  // (can differ due to printf bug for large arrays)
   printf("SOFTWARE AND HARDWARE RESULTS\n");
   for (int i = 0; i < length; i++) {
     printf("SW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_SW[i]);
     printf("HW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_HW[i]);
   }
 
+  // Report result summary
   printf("Software implementation took 0x%x cycles\n", t1-t0);
   printf("Hardware implementation took 0x%x cycles\n", t2-t1);
-  
+
   uart_write_flush();
 
   return 0;

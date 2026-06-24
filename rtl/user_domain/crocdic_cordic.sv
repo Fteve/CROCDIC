@@ -106,6 +106,7 @@ module crocdic_cordic import user_pkg::*; #(
   logic [WIDTH-1:0] offset;
   logic [WIDTH-1:0] kfinal;
 
+  logic [31:0] intermediate_mult_result; // 32-bit wire to store intermediate multiplication step for sqrt output
 
 
 
@@ -237,6 +238,7 @@ module crocdic_cordic import user_pkg::*; #(
   always_comb begin
     output_element_o = '0;
     cordic_done_o = '0;
+    intermediate_mult_result = '0;
 
     if (state_q == DONE) begin
       cordic_done_o = 1;
@@ -252,7 +254,8 @@ module crocdic_cordic import user_pkg::*; #(
           output_element_o = z_iteration_q;
         end
         SQRT: begin
-          output_element_o =  (CORDIC_1KP/MUL) * x_iteration_q; // This is in Q2.14 form. Divide again by MUL in SW for normal decimal form.
+          intermediate_mult_result = 32'(CORDIC_1KP) * 32'(x_iteration_q);
+          output_element_o = intermediate_mult_result / MUL ; // This is in Q2.14 form. Divide again by MUL in SW for normal decimal form.
         end
         RECIPROCAL: begin
           output_element_o = z_iteration_q; 

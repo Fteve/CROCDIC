@@ -163,7 +163,7 @@ module crocdic_top import user_pkg::*; #(
 
   logic cordic_en_0, cordic_en_1, cordic_done_0, cordic_done_1;
   logic [MgrObiCfg.DataWidth/2-1:0] cordic_output_0, cordic_output_1;
-  logic [3:0] word_addr;
+  logic [4:0] word_addr;
  
   always_comb begin
     // Default assignments
@@ -196,36 +196,36 @@ module crocdic_top import user_pkg::*; #(
             sbr_rsp_err = '1;
           end else begin
             case(word_addr)
-              5'h0: sbr_rsp_data = 32'h53;  //S // Each characters take up 4 reserved bytes and corresponds to 4 bits of memory.
-              5'h1: sbr_rsp_data = 32'h43;  //C
-              5'h2: sbr_rsp_data = 32'h26;  //&
-              5'h3: sbr_rsp_data = 32'h41;  //A
-              5'h4: sbr_rsp_data = 32'h54;  //T
-              5'h5: sbr_rsp_data = 32'h27;  //'
-              5'h6: sbr_rsp_data = 32'h73;  //s
-              5'h7: sbr_rsp_data = 32'h20;  // 
-              5'h8: sbr_rsp_data = 32'h41;  //A
-              5'h9: sbr_rsp_data = 32'h53;  //S
-              5'hA: sbr_rsp_data = 32'h49;  //I
-              5'hB: sbr_rsp_data = 32'h43;  //C
-              5'hC: sbr_rsp_data = 32'h00;  //null-terminator
-              5'hD: sbr_rsp_data = 32'h00;
-              5'hE: sbr_rsp_data = 32'h00;
-              5'hF: sbr_rsp_data = 32'h00;
-              5'h10: sbr_rsp_data = 32'h00;
-              5'h11: sbr_rsp_data = 32'h00;
-              5'h12: sbr_rsp_data = 32'h00;
-              5'h13: sbr_rsp_data = 32'h00;
-              5'h14: sbr_rsp_data = 32'h00;
-              5'h15: sbr_rsp_data = 32'h00;
-              5'h16: sbr_rsp_data = 32'h00;
-              5'h17: sbr_rsp_data = 32'h00;
-              5'h18: sbr_rsp_data = 32'h00;
-              5'h19: sbr_rsp_data = 32'h00;
-              5'h1A: sbr_rsp_data = 32'h00;
-              5'h1B: sbr_rsp_data = 32'h00;
-              5'h1C: sbr_rsp_data = 32'h00;
-              5'h1D: sbr_rsp_data = 32'h00;
+              5'h0: sbr_rsp_data = 32'h41;  //A // Each character takes up 4 reserved bytes and corresponds to 4 bits of the memory address.
+              5'h1: sbr_rsp_data = 32'h44;  //D
+              5'h2: sbr_rsp_data = 32'h52;  //R
+              5'h3: sbr_rsp_data = 32'h49;  //I
+              5'h4: sbr_rsp_data = 32'h41;  //A
+              5'h5: sbr_rsp_data = 32'h4E;  //N
+              5'h6: sbr_rsp_data = 32'h20;  //
+              5'h7: sbr_rsp_data = 32'h54;  //T 
+              5'h8: sbr_rsp_data = 32'h52;  //R
+              5'h9: sbr_rsp_data = 32'h55;  //U
+              5'hA: sbr_rsp_data = 32'h4D;  //M
+              5'hB: sbr_rsp_data = 32'h4D;  //M
+              5'hC: sbr_rsp_data = 32'h45;  //E
+              5'hD: sbr_rsp_data = 32'h52;  //R
+              5'hE: sbr_rsp_data = 32'h20;  // 
+              5'hF: sbr_rsp_data = 32'h26;  //&
+              5'h10: sbr_rsp_data = 32'h20; //
+              5'h11: sbr_rsp_data = 32'h53; //S
+              5'h12: sbr_rsp_data = 32'h54; //T
+              5'h13: sbr_rsp_data = 32'h45; //E
+              5'h14: sbr_rsp_data = 32'h56; //V
+              5'h15: sbr_rsp_data = 32'h45; //E
+              5'h16: sbr_rsp_data = 32'h4E; //N
+              5'h17: sbr_rsp_data = 32'h20; //
+              5'h18: sbr_rsp_data = 32'h43; //C
+              5'h19: sbr_rsp_data = 32'h48; //H
+              5'h1A: sbr_rsp_data = 32'h45; //E
+              5'h1B: sbr_rsp_data = 32'h4E; //N
+              5'h1C: sbr_rsp_data = 32'h47; //G
+              5'h1D: sbr_rsp_data = 32'h00; //null-terminator
               5'h1E: sbr_rsp_data = 32'h00;
               5'h1F: sbr_rsp_data = 32'h00;
               default: sbr_rsp_data = 32'h0;

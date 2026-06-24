@@ -5,12 +5,13 @@
 #include "gpio.h"
 #include "util.h"
 
-#define CROCDIC_START 0x20000004UL
-#define CROCDIC_OPERATION 0x20000008UL
-#define CROCDIC_SOURCE_ARRAY_ADDRESS 0x2000000CUL
-#define CROCDIC_NR_OF_ELEMENTS 0x20000010UL
-#define CROCDIC_DESTINATION_ARRAY_ADDRESS 0x20000014UL
-#define CROCDIC_DONE 0x20000018UL
+#define STUDENT_NAMES 0x20000000UL
+#define CROCDIC_START 0x20000080UL
+#define CROCDIC_OPERATION 0x20000084UL
+#define CROCDIC_SOURCE_ARRAY_ADDRESS 0x20000088UL
+#define CROCDIC_NR_OF_ELEMENTS 0x2000008CUL
+#define CROCDIC_DESTINATION_ARRAY_ADDRESS 0x20000090UL
+#define CROCDIC_DONE 0x20000094UL
 
 #define ROTATION   0
 #define VECTORING  1
@@ -109,10 +110,21 @@ int main(int argc, char **argv)
 
   // Timestamps
   uint32_t t0, t1, t2;
-
+  uint32_t four_characters;
+  
+  char str[32];
 
   integer x1, y1, z1, x2, y2, z2;   
   integer w1;
+
+  for (int i = 0; i < 32; i++) {
+        four_characters = *reg32(USER_ROM_BASE_ADDR, i*4);
+
+        str[i] = four_characters;
+    }
+
+  printf("%s\n", str);
+
 
   // ROTATION, SIN
   printf("SINE\n");
@@ -172,11 +184,11 @@ int main(int argc, char **argv)
   //   printf("HW:: Input: 0x%x, Output: 0x%x\n", source_array[i], destination_array_HW[i]);
   // }
 
-  printf("SOFTWARE AND HARDWARE RESULTS\n");
-  for (int i = 0; i < length; i++) {
-    printf("SW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_SW[i]);
-    printf("HW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_HW[i]);
-  }
+  // printf("SOFTWARE AND HARDWARE RESULTS\n");
+  // for (int i = 0; i < length; i++) {
+  //   printf("SW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_SW[i]);
+  //   printf("HW:: Index: [0x%x], Input: 0x%x, Output: 0x%x\n", i, source_array[i], destination_array_HW[i]);
+  // }
 
   printf("Software implementation took 0x%x cycles\n", t1-t0);
   printf("Hardware implementation took 0x%x cycles\n", t2-t1);

@@ -29,13 +29,13 @@ module crocdic_top import user_pkg::*; #(
   input  mgr_obi_rsp_t mgr_obi_rsp_i
 );
   // Memory-Mapped IO Addresses (always increment in steps of 4 because 32-bit addresses adress 4 bytes at a time)
-  localparam logic [SbrObiCfg.AddrWidth-1:0] STUDENT_NAMES = croc_pkg::UserBaseAddr; // TODO:  Further, the chip must have a way to output the names of the students in the group. The default way that will be checked automatically is to read from the 0x2000_0000 address (i.e. the start of Croc's user domain) and expect a zero terminated string.  
-  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_START = croc_pkg::UserBaseAddr + 'h4;
-  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_OPERATION = croc_pkg::UserBaseAddr + 'h8;
-  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_SOURCE_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'hC;
-  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_NR_OF_ELEMENTS = croc_pkg::UserBaseAddr + 'h10;
-  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_DESTINATION_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'h14;
-  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_DONE  = croc_pkg::UserBaseAddr + 'h18;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] STUDENT_NAMES = croc_pkg::UserBaseAddr; // Further, the chip must have a way to output the names of the students in the group. The default way that will be checked automatically is to read from the 0x2000_0000 address (i.e. the start of Croc's user domain) and expect a zero terminated string.  
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_START = croc_pkg::UserBaseAddr + 'h80;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_OPERATION = croc_pkg::UserBaseAddr + 'h84;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_SOURCE_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'h88;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_NR_OF_ELEMENTS = croc_pkg::UserBaseAddr + 'h8C;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_DESTINATION_ARRAY_ADDRESS = croc_pkg::UserBaseAddr + 'h90;
+  localparam logic [SbrObiCfg.AddrWidth-1:0] CROCDIC_DONE  = croc_pkg::UserBaseAddr + 'h94;
 
   // operation_t enum now defined in user_pkg.sv
 
@@ -104,7 +104,7 @@ module crocdic_top import user_pkg::*; #(
   `FF(mgr_rid_q , mgr_rid_d , '0);
   `FF(mgr_err_q , mgr_err_d , '0);
 
-  // Wire the reponse (master)
+  // Wire the response (master)
   assign mgr_gnt_d = mgr_obi_rsp_i.gnt;
   assign mgr_rvalid_d = mgr_obi_rsp_i.rvalid;
   assign mgr_rdata_d = mgr_obi_rsp_i.r.rdata;
@@ -163,6 +163,7 @@ module crocdic_top import user_pkg::*; #(
 
   logic cordic_en_0, cordic_en_1, cordic_done_0, cordic_done_1;
   logic [MgrObiCfg.DataWidth/2-1:0] cordic_output_0, cordic_output_1;
+  logic [4:0] word_addr;
  
   always_comb begin
     // Default assignments
@@ -185,11 +186,28 @@ module crocdic_top import user_pkg::*; #(
     elements_1_d = elements_1_q;
     element_counter_d = element_counter_q;
     which_input_d = which_input_q;
+    word_addr = sbr_addr_q[6:2];
 
 
     case(state_q)
       IDLE: begin
-        if (sbr_req_q && sbr_addr_q == CROCDIC_START) begin
+        if (sbr_req_q && sbr_addr_q >= STUDENT_NAMES && sbr_addr_q < CROCDIC_START) begin
+          if (sbr_we_q) begin
+            sbr_rsp_err = '1;
+          end else begin
+            case(word_addr)  // each read reponse returns 4 bytes (4 characters) at a time
+              5'h0: sbr_rsp_data = 32'h49_52_44_41; // A D R I   // Each 4 characters take up 4 reserved bytes and corresponds to 4 bits of the memory address.
+              5'h1: sbr_rsp_data = 32'h54_20_4E_41; // A N   T   
+              5'h2: sbr_rsp_data = 32'h4D_4D_55_52; // R U M M  
+              5'h3: sbr_rsp_data = 32'h26_20_52_45; // E R   &  
+              5'h4: sbr_rsp_data = 32'h45_54_53_20; //   S T E  
+              5'h5: sbr_rsp_data = 32'h20_4E_45_56; // V E N    
+              5'h6: sbr_rsp_data = 32'h4E_45_48_43; // C H E N  
+              5'h7: sbr_rsp_data = 32'h00_00_00_47; // G 0 0 0   
+              default: sbr_rsp_data = 32'h0;
+            endcase
+          end
+        end else if (sbr_req_q && sbr_addr_q == CROCDIC_START) begin
           if (sbr_we_q) begin
             if (number_of_elements_q > 0) begin
               element_counter_d = '0;  // reset element counter

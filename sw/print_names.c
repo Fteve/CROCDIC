@@ -19,17 +19,7 @@ int main(int argc, char **argv)
 {
   uart_init();
 
-  uint32_t four_characters;
-  
-  char str[32];
-
-  for (int i = 0; i < 32; i++) {
-        four_characters = *reg32(USER_ROM_BASE_ADDR, i*4);
-
-        str[i] = four_characters;
-    }
-
-  printf("%s\n", str);
+  printf("%s\n", STUDENT_NAMES);
   
   uart_write_flush();
 

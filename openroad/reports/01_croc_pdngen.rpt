@@ -1,0 +1,12 @@
+violation type: Obstructed - sram_512x32_grid - i_croc_soc/i_croc/gen_sram_bank\[0\].i_sram/gen_512x32xBx1.i_cut - Metal1 -> Metal4
+	srcs: net:VDD
+	bbox = (345.0200, 1370.8800) - (346.0700, 1371.0400) on Layer -
+violation type: Obstructed - sram_512x32_grid - i_croc_soc/i_croc/gen_sram_bank\[0\].i_sram/gen_512x32xBx1.i_cut - Metal1 -> Metal4
+	srcs: net:VDD
+	bbox = (770.8100, 1370.8800) - (771.8600, 1371.0400) on Layer -
+violation type: Obstructed - sram_512x32_grid - i_croc_soc/i_croc/gen_sram_bank\[1\].i_sram/gen_512x32xBx1.i_cut - Metal1 -> Metal4
+	srcs: net:VDD
+	bbox = (1643.9800, 1370.8800) - (1645.0300, 1371.0400) on Layer -
+violation type: Obstructed - sram_512x32_grid - i_croc_soc/i_croc/gen_sram_bank\[1\].i_sram/gen_512x32xBx1.i_cut - Metal1 -> Metal4
+	srcs: net:VDD
+	bbox = (2069.7700, 1370.8800) - (2070.8200, 1371.0400) on Layer -

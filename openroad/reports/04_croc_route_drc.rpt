@@ -1,0 +1,15 @@
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_core_wrap/_0940_
+	bbox = (822.6700, 1160.3550) - (822.8450, 1160.5650) on Layer Metal1
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_core_wrap/_0940_
+	bbox = (822.6700, 1160.4100) - (822.8450, 1160.5650) on Layer Metal1
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_dm_top.i_dm_top/_2756_
+	bbox = (1378.7500, 1130.1150) - (1378.9250, 1130.3250) on Layer Metal1
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_soc_ctrl/_001_
+	bbox = (1701.7750, 1144.1500) - (1701.9450, 1144.1850) on Layer Metal1
+violation type: Metal Spacing
+	srcs: net:i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_resp/i_cdc_reset_ctrlr/i_cdc_reset_ctrlr_half_b/i_state_transition_cdc_src/_00_
+	bbox = (1110.8350, 841.7500) - (1111.0050, 841.7850) on Layer Metal1

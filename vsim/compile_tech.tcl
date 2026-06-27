@@ -25,10 +25,11 @@ if {[catch { vlog -incr -sv \
     "$ROOT/technology/verilog/RM_IHPSG13_1P_core_behavioral_bm_bist.v" \
     "$ROOT/technology/verilog/RM_IHPSG13_1P_core_behavioral.v" \
     "$ROOT/technology/verilog/RM_IHPSG13_2P_core_behavioral_bm_bist_ideal.v" \
-    "$ROOT/technology/verilog/RM_IHPSG13_2P_core_behavorial_ideal.v" \
+    "$ROOT/technology/verilog/RM_IHPSG13_2P_core_behavioral_ideal.v" \
     "$ROOT/technology/verilog/sg13cmos5l_io.v" \
     "$ROOT/technology/verilog/sg13cmos5l_stdcell.v" \
     "$ROOT/technology/verilog/sg13g2_io.v" \
     "$ROOT/ihp13/tc_sram_impl.sv" \
     "$ROOT/ihp13/tc_clk.sv" \
+    "$ROOT/ihp13/empty_cells.v" \
 }]} {return 1}

@@ -1,9 +1,12 @@
 # This script was generated automatically by bender.
 set ROOT ".."
 
+puts "Begin"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -13,9 +16,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/common_verification/clk_rst_gen.sv" \
 }]} {return 1}
 
+puts "Yomp 1"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -26,9 +32,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/tech_cells_generic/tc_sram_impl.sv" \
 }]} {return 1}
 
+puts "Yomp 2"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -38,9 +47,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/tech_cells_generic/tc_clk.sv" \
 }]} {return 1}
 
+puts "Yomp 3"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -51,9 +63,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/common_cells/binary_to_gray.sv" \
 }]} {return 1}
 
+puts "Yomp 4"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -115,9 +130,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/common_cells/multiaddr_decode.sv" \
 }]} {return 1}
 
+puts "Yomp 5"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -157,9 +175,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/common_cells/mem_to_banks.sv" \
 }]} {return 1}
 
+puts "Yomp 6"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -182,9 +203,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/obi/obi_xbar.sv" \
 }]} {return 1}
 
+puts "Yomp 7"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -196,9 +220,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/apb/apb_pkg.sv" \
 }]} {return 1}
 
+puts "Yomp 8"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -230,9 +257,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/cve2/cve2_core.sv" \
 }]} {return 1}
 
+puts "Yomp 9"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -256,9 +286,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/idma/croc_idma.sv" \
 }]} {return 1}
 
+puts "Yomp 10"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -277,9 +310,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/obi_uart/obi_uart.sv" \
 }]} {return 1}
 
+puts "Yomp 11"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -295,9 +331,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/riscv-dbg/dmi_cdc.sv" \
 }]} {return 1}
 
+puts "Yomp 12"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -308,9 +347,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/riscv-dbg/dmi_jtag_tap.sv" \
 }]} {return 1}
 
+puts "Yomp 13"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -324,9 +366,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/riscv-dbg/dm_obi_top.sv" \
 }]} {return 1}
 
+puts "Yomp 14"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -337,9 +382,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/riscv-dbg/dmi_test.sv" \
 }]} {return 1}
 
+puts "Yomp 15"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -350,9 +398,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/riscv-dbg/tb/jtag_test_simple.sv" \
 }]} {return 1}
 
+puts "Yomp 16"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -367,9 +418,12 @@ if {[catch { vlog -incr -sv \
     "$ROOT/ihp13/tc_sram_impl.sv" \
 }]} {return 1}
 
+puts "Yomp 17"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_NETLIST_YOSYS" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
@@ -388,42 +442,18 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/obi_timer/obi_timer_reg_pkg.sv" \
 }]} {return 1}
 
-if {[catch { vlog -incr -sv \
-    -svinputport=compat \
-    "+define+TARGET_IHP13" \
-    "+define+TARGET_NETLIST_YOSYS" \
-    "+define+TARGET_SIMULATION" \
-    "+define+TARGET_VERILATOR" \
-    "+define+TARGET_VSIM" \
-    "+define+SYNTHESIS" \
-    "+define+SIMULATION" \
-    "+incdir+$ROOT/rtl/apb/include" \
-    "+incdir+$ROOT/rtl/common_cells/include" \
-    "+incdir+$ROOT/rtl/idma/include" \
-    "+incdir+$ROOT/rtl/obi/include" \
-    "$ROOT/rtl/croc_chip.sv" \
-}]} {return 1}
+puts "Before croc.v"
 
-if {[catch { vlog -incr -sv \
-    -svinputport=compat \
-    "+define+TARGET_IHP13" \
-    "+define+TARGET_NETLIST_YOSYS" \
-    "+define+TARGET_SIMULATION" \
-    "+define+TARGET_VERILATOR" \
-    "+define+TARGET_VSIM" \
-    "+define+SYNTHESIS" \
-    "+define+SIMULATION" \
-    "+incdir+$ROOT/rtl/apb/include" \
-    "+incdir+$ROOT/rtl/common_cells/include" \
-    "+incdir+$ROOT/rtl/idma/include" \
-    "+incdir+$ROOT/rtl/obi/include" \
+if {[catch { vlog -incr \
     "$ROOT/openroad/out/croc.v" \
 }]} {return 1}
 
+puts "After croc.v"
+
 if {[catch { vlog -incr -sv \
     -svinputport=compat \
     "+define+TARGET_IHP13" \
-    "+define+TARGET_POSTLAYOUT" \
+    "+define+TARGET_NETLIST_OPENROAD" \
     "+define+TARGET_SIMULATION" \
     "+define+TARGET_VERILATOR" \
     "+define+TARGET_VSIM" \
@@ -438,3 +468,4 @@ if {[catch { vlog -incr -sv \
     "$ROOT/rtl/test/tb_croc_soc.sv" \
 }]} {return 1}
 
+puts "Done"

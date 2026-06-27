@@ -87,7 +87,7 @@ module tb_croc_soc #(
   ////////////
   //  DUT   //
   ////////////
-`ifdef TARGET_POSTLAYOUT
+`ifdef TARGET_NETLIST_OPENROAD
     wire  [GpioCount-1:0] gpio_io_tb;
     logic [GpioCount-1:0] gpio_en_tb;
 

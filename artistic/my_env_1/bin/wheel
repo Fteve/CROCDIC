@@ -1,0 +1,6 @@
+#!/scratch/vlsi2_25fs26/CROCDIC/artistic/my_env_1/bin/python3
+import sys
+from wheel._commands import main
+if __name__ == '__main__':
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
+    sys.exit(main())

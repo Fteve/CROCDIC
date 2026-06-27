@@ -70,7 +70,7 @@ set southPitch [expr {floor($southSpan / double($numPadsLongEdge - 1))}]
 set southStart $cornerToPad
 
 place_pad -row IO_SOUTH -location [expr {$southStart +  0*$southPitch}] "pad_vss0"         ; # pin no:  1
-place_pad -row IO_SOUTH -location [expr {$southStart +  1*$southPitch}] "pad_vssio0"       ; # pin no:  2
+place_pad -row IO_SOUTH -location [expr {$southStart +  1*$southPitch}] "pad_vssio1"       ; # pin no:  2
 place_pad -row IO_SOUTH -location [expr {$southStart +  2*$southPitch}] "pad_vddio1"       ; # pin no:  3
 place_pad -row IO_SOUTH -location [expr {$southStart +  3*$southPitch}] "pad_gpio0_io"     ; # pin no:  4
 place_pad -row IO_SOUTH -location [expr {$southStart +  4*$southPitch}] "pad_gpio1_io"     ; # pin no:  5
@@ -86,7 +86,7 @@ place_pad -row IO_SOUTH -location [expr {$southStart + 13*$southPitch}] "pad_gpi
 place_pad -row IO_SOUTH -location [expr {$southStart + 14*$southPitch}] "pad_gpio11_io"    ; # pin no: 15
 place_pad -row IO_SOUTH -location [expr {$southStart + 15*$southPitch}] "pad_vdd1"         ; # pin no: 16
 place_pad -row IO_SOUTH -location [expr {$southStart + 16*$southPitch}] "pad_vss1"         ; # pin no: 17
-place_pad -row IO_SOUTH -location [expr {$southStart + 17*$southPitch}] "pad_vssio1"       ; # pin no: 18
+place_pad -row IO_SOUTH -location [expr {$southStart + 17*$southPitch}] "pad_vssio2"       ; # pin no: 18
 
 ##########################################################################
 # Edge: RIGHT (bottom to top)                                            #
@@ -121,7 +121,7 @@ set northPitch [expr {floor($northSpan / double($numPadsLongEdge - 1))}]
 set northStart [expr {$chipW - $cornerToPad - $padW}]
 
 place_pad -row IO_NORTH -location [expr {$northStart -  0*$northPitch}] "pad_vss2"            ; # pin no:  1
-place_pad -row IO_NORTH -location [expr {$northStart -  1*$northPitch}] "pad_vssio2"          ; # pin no:  2
+place_pad -row IO_NORTH -location [expr {$northStart -  1*$northPitch}] "pad_vssio3"          ; # pin no:  2
 place_pad -row IO_NORTH -location [expr {$northStart -  2*$northPitch}] "pad_vddio3"          ; # pin no:  3
 place_pad -row IO_NORTH -location [expr {$northStart -  3*$northPitch}] "pad_gpio24_io"       ; # pin no:  4
 place_pad -row IO_NORTH -location [expr {$northStart -  4*$northPitch}] "pad_gpio25_io"       ; # pin no:  5
@@ -137,7 +137,7 @@ place_pad -row IO_NORTH -location [expr {$northStart - 13*$northPitch}] "pad_unu
 place_pad -row IO_NORTH -location [expr {$northStart - 14*$northPitch}] "pad_unused3_o"       ; # pin no: 15
 place_pad -row IO_NORTH -location [expr {$northStart - 15*$northPitch}] "pad_vdd3"            ; # pin no: 16
 place_pad -row IO_NORTH -location [expr {$northStart - 16*$northPitch}] "pad_vss3"            ; # pin no: 17
-place_pad -row IO_NORTH -location [expr {$northStart - 17*$northPitch}] "pad_vssio3"          ; # pin no: 18
+place_pad -row IO_NORTH -location [expr {$northStart - 17*$northPitch}] "pad_vssio0"          ; # pin no: 18
 
 # Fill in the rest of the padring
 place_corners $iocorner

@@ -1,6 +1,6 @@
 {
     "general" : {
-       "chip"       : "croc"
+       "chip"       : "croc_chip"
     },
     "gds" : {
         "file"        : "../meerkat_work/croc_chip.gds.gz",
@@ -31,12 +31,8 @@
         "M3"   : {"layer" :  "30/0", "color" : "#5c0c02", "alpha" : "0.6" },
         "V3"   : {"layer" :  "49/0", "color" : "#CD3700", "alpha" : "0.5" },
         "M4"   : {"layer" :  "50/0", "color" : "#CD3700", "alpha" : "0.5" },
-        "V4"   : {"layer" :  "66/0", "color" : "#00CD00", "alpha" : "0.5" },
-        "M5"   : {"layer" :  "67/0", "color" : "#00CD00", "alpha" : "0.5" },
         "TV1"  : {"layer" : "125/0", "color" : "#7FFFD4", "alpha" : "0.5" },
-        "T1"   : {"layer" : "126/0", "color" : "#7FFFD4", "alpha" : "0.5" },
-        "TV2"  : {"layer" : "133/0", "color" : "#1E90FF", "alpha" : "0.5" },
-        "T2"   : {"layer" : "134/0", "color" : "#FFFFFF", "alpha" : "0.4" }
+        "T1"   : {"layer" : "126/0", "color" : "#7FFFD4", "alpha" : "0.5" }
     },
     "work" : {
         "dir" : "../renderics"
@@ -54,12 +50,8 @@
             "M3",
             "V3",
             "M4",
-            "V4",
-            "M5",
             "TV1",
-            "T1",
-            "TV2",
-            "T2"
+            "T1"
         ],
         "db_unit_nm"       : 0.1,
         "dry_run"          : false

@@ -87,7 +87,7 @@ create_logo() {
         -g croc_logo.gds \
         -o croc_chip.gds.gz \
         -w meerkat_work \
-        -l 134"
+        -l 126"
 
     run_cmd "echo [INFO][Meerkat] Export top metal"
     run_cmd "cd meerkat_work"
@@ -99,7 +99,7 @@ create_logo() {
     run_cmd "python3 artistic/scripts/meerkat.py \
         -i meerkat_work/croc_logo.mono.png \
         -g meerkat_work/croc_tm.gds \
-        -l 134 \
+        -l 126 \
         -n croc \
         -s meerkat_work/croc_logo.svg \
         -o meerkat_work/croc_logo.gds \
@@ -210,7 +210,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         --logo)
             prepare_logo
-            create_logo $2
+            #create_logo $2
             shift 2
             ;;
         --render-raw) # CI only

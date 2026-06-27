@@ -417,7 +417,7 @@ if {[catch { vlog -incr -sv \
     "+incdir+$ROOT/rtl/common_cells/include" \
     "+incdir+$ROOT/rtl/idma/include" \
     "+incdir+$ROOT/rtl/obi/include" \
-    "$ROOT/yosys/out/netlist_debug.v" \
+    "$ROOT/openroad/out/croc.v" \
 }]} {return 1}
 
 if {[catch { vlog -incr -sv \

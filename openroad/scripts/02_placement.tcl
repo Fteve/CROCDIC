@@ -66,6 +66,15 @@ utl::report "###################################################################
 
 set_thread_count 8
 
+# =============================================================================
+# FIXED M1.b DRC: Specific Padding for Problematic Cells
+# =============================================================================
+utl::report "Applying targeted placement padding to eliminate M1.b DRC issues..."
+
+# Provide a safe 2-site buffer on both sides of the problematic master cells
+set_placement_padding -masters "DFFRQX3 AND4X2" -left 2 -right 2
+# =============================================================================
+
 # global_placement parameters:
 # density:            In every part of the chip, about N% of the area is occupied by standard cells
 # routability_driven: Reduce density target when there are a lot of wires in an area

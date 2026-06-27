@@ -22,6 +22,7 @@ klayout -zz -rd design_name=${topcell} \
         -rd out_file=${outfile} \
         -rd tech_file=./.klayout/tech/${technology}.lyt \
         -rd layer_map='' \
+        -rd lef_files='' \
         -rd seal_file='' \
         -rd config_file='' \
         -rd allow_empty='RM_IHPSG13_(1P|2P)_BITKIT_16x2_(CORNER|EDGE_TB|LE_con_corner|LE_con_edge_lr|LE_con_tap_lr|POWER_ramtap|TAP|TAP_LR)$' \

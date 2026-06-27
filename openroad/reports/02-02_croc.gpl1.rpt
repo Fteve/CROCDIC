@@ -7,17 +7,17 @@
 ==========================================================================
 02-02_croc.gpl1 report_tns
 --------------------------------------------------------------------------
-tns max -317969.91
+tns max -165804.02
 
 ==========================================================================
 02-02_croc.gpl1 report_wns
 --------------------------------------------------------------------------
-wns max -73.19
+wns max -37.68
 
 ==========================================================================
 02-02_croc.gpl1 report_worst_slack
 --------------------------------------------------------------------------
-worst slack max -73.19
+worst slack max -37.68
 
 ==========================================================================
 02-02_croc.gpl1 report_checks -path_delay min
@@ -100,13 +100,13 @@ Fanout     Cap    Slew   Delay    Time   Description
                   0.20    0.00    0.00   clock clk_sys (rise edge)
                           0.00    0.00   clock network delay (ideal)
                   0.20    0.00    0.00 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/master_add_o[3]_reg/CK (DFFRQX3)
-     8    0.01    0.03    0.24    0.24 v i_croc_soc/i_croc/i_dm_top.i_dm_top/master_add_o[3]_reg/Q (DFFRQX3)
-                  0.03    0.00    0.24 v i_croc_soc/i_croc/_5581_/A (NAND3X1)
-     1    0.00    0.02    0.03    0.27 ^ i_croc_soc/i_croc/_5581_/Y (NAND3X1)
-                  0.02    0.00    0.27 ^ i_croc_soc/i_croc/_5582_/C (OAI211X1)
-     1    0.00    0.04    0.05    0.32 v i_croc_soc/i_croc/_5582_/Y (OAI211X1)
-                  0.04    0.00    0.32 v i_croc_soc/i_croc/_5583_/B (AND2X1)
-     1    0.00    0.03    0.07    0.38 v i_croc_soc/i_croc/_5583_/Y (AND2X1)
+    11    0.01    0.04    0.24    0.24 v i_croc_soc/i_croc/i_dm_top.i_dm_top/master_add_o[3]_reg/Q (DFFRQX3)
+                  0.04    0.00    0.24 v i_croc_soc/i_croc/_5138_/A (NAND3X1)
+     1    0.00    0.02    0.03    0.27 ^ i_croc_soc/i_croc/_5138_/Y (NAND3X1)
+                  0.02    0.00    0.27 ^ i_croc_soc/i_croc/_5139_/C (OAI211X1)
+     1    0.00    0.04    0.05    0.32 v i_croc_soc/i_croc/_5139_/Y (OAI211X1)
+                  0.04    0.00    0.32 v i_croc_soc/i_croc/_5143_/A (AND2X1)
+     1    0.00    0.03    0.06    0.38 v i_croc_soc/i_croc/_5143_/Y (AND2X1)
                   0.04    0.00    0.38 v i_croc_soc/i_croc/gen_sram_bank[1].i_sram/gen_512x32xBx1.i_cut/A_ADDR[1] (RM_IHPSG13_1P_512x32_c2_bm_bist)
                                   0.38   data arrival time
 
@@ -145,7 +145,7 @@ Fanout     Cap    Slew   Delay    Time   Description
      2    0.00    0.04    0.34    0.34 ^ i_croc_soc/i_rstgen.i_rstgen_bypass.synch_regs_q_3__reg/Q (DFFRQX3)
                   0.04    0.00    0.34 ^ i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/A0 (MUX2X2)
   4310   13.50   61.80   42.75   43.09 ^ i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/Y (MUX2X2)
-                 61.80    0.00   43.09 ^ i_croc_soc/i_croc/all_periph_obi_rsp_316__reg/RB (DFFRQX3)
+                  3.20    0.00   43.09 ^ i_croc_soc/i_croc/all_periph_obi_rsp_316__reg/RB (DFFRQX3)
                                  43.09   data arrival time
 
                   0.20   10.00   10.00   clock clk_sys (rise edge)
@@ -153,18 +153,18 @@ Fanout     Cap    Slew   Delay    Time   Description
                          -0.10    9.90   clock uncertainty
                           0.00    9.90   clock reconvergence pessimism
                                   9.90 ^ i_croc_soc/i_croc/all_periph_obi_rsp_316__reg/CK (DFFRQX3)
-                        -37.17  -27.27   library recovery time
-                                -27.27   data required time
+                         -1.68    8.22   library recovery time
+                                  8.22   data required time
 -----------------------------------------------------------------------------
-                                -27.27   data required time
+                                  8.22   data required time
                                 -43.09   data arrival time
 -----------------------------------------------------------------------------
-                                -70.36   slack (VIOLATED)
+                                -34.86   slack (VIOLATED)
 
 
 Startpoint: i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/async_ack_o_reg
             (rising edge-triggered flip-flop clocked by clk_sys)
-Endpoint: i_croc_soc/i_croc/i_dm_top.i_dm_top/i_dm_csrs.progbuf_o_194__reg
+Endpoint: i_croc_soc/i_croc/i_dm_top.i_dm_top/master_add_o[24]_reg
           (rising edge-triggered flip-flop clocked by clk_sys)
 Path Group: path delay
 Path Type: max
@@ -173,34 +173,34 @@ Corner: tt
 Fanout     Cap    Slew   Delay    Time   Description
 -----------------------------------------------------------------------------
                   0.20    0.00    0.00 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/async_ack_o_reg/CK (DFFRQX3)
-    88    0.15    0.53    0.70    0.70 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/async_ack_o_reg/Q (DFFRQX3)
-                  0.53    0.00    0.70 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/_300_/B (XOR2X2)
-     1    0.00    0.11    0.25    0.95 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/_300_/Y (XOR2X2)
-                  0.11    0.00    0.95 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/_0_/AB (NOR2BX1)
-    11    0.02    0.38    0.35    1.30 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/_0_/Y (NOR2BX1)
-                  0.38    0.00    1.30 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_3382_/A (AND3X2)
-    14    0.03    0.16    0.37    1.66 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_3382_/Y (AND3X2)
-                  0.16    0.00    1.66 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_3797_/A (NAND2X3)
-     6    0.01    0.09    0.12    1.78 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_3797_/Y (NAND2X3)
-                  0.09    0.00    1.78 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5259_/A (OAI21X2)
-     8    0.03    0.30    0.26    2.05 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5259_/Y (OAI21X2)
-                  0.30    0.00    2.05 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5546_/D (AOAI211X2)
-    64    0.11    1.03    0.90    2.95 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5546_/Y (AOAI211X2)
-                  1.03    0.00    2.95 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5557_/C (NOR3BX1)
-     1    0.00    0.22    0.26    3.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5557_/Y (NOR3BX1)
-                  0.22    0.00    3.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5558_/C (AO21X2)
-     1    0.00    0.06    0.16    3.36 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5558_/Y (AO21X2)
-                  0.06    0.00    3.36 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/i_dm_csrs.progbuf_o_194__reg/D (DFFRQX3)
-                                  3.36   data arrival time
+     6    0.01    0.08    0.38    0.38 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/async_ack_o_reg/Q (DFFRQX3)
+                  0.08    0.00    0.38 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/_152_/A (XOR2X1)
+     1    0.00    0.08    0.11    0.48 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/_152_/Y (XOR2X1)
+                  0.08    0.00    0.48 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/_1_/AB (NOR2BX1)
+     9    0.02    0.35    0.31    0.79 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/_1_/Y (NOR2BX1)
+                  0.35    0.00    0.79 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_3545_/A (NAND2X3)
+     8    0.02    0.14    0.20    0.99 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_3545_/Y (NAND2X3)
+                  0.14    0.00    0.99 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_3546_/B (NOR2X4)
+    16    0.04    0.21    0.21    1.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_3546_/Y (NOR2X4)
+                  0.21    0.00    1.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5611_/A (NAND3X1)
+    48    0.08    1.64    1.34    2.54 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5611_/Y (NAND3X1)
+                  1.64    0.00    2.54 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5678_/A (INVX1)
+    14    0.02    0.52    0.66    3.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5678_/Y (INVX1)
+                  0.52    0.00    3.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5719_/A (NOR2X1)
+     1    0.00    0.11    0.13    3.33 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5719_/Y (NOR2X1)
+                  0.11    0.00    3.33 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5720_/C (AOI211X1)
+     1    0.00    0.25    0.14    3.47 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5720_/Y (AOI211X1)
+                  0.25    0.00    3.47 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/master_add_o[24]_reg/D (DFFRQX3)
+                                  3.47   data arrival time
 
                           3.00    3.00   max_delay
-                         -0.09    2.91   library setup time
-                                  2.91   data required time
+                         -0.13    2.87   library setup time
+                                  2.87   data required time
 -----------------------------------------------------------------------------
-                                  2.91   data required time
-                                 -3.36   data arrival time
+                                  2.87   data required time
+                                 -3.47   data arrival time
 -----------------------------------------------------------------------------
-                                 -0.45   slack (VIOLATED)
+                                 -0.60   slack (VIOLATED)
 
 
 Startpoint: i_croc_soc/i_croc/i_dmi_jtag/td_o_reg
@@ -247,21 +247,21 @@ Fanout     Cap    Slew   Delay    Time   Description
      2    0.23    0.49    0.03    2.53 v testmode_i (in)
                   0.49    0.00    2.53 v pad_testmode_i/pad (sg13cmos5l_IOPadIn)
      4    0.01    0.12    0.60    3.13 v pad_testmode_i/p2c (sg13cmos5l_IOPadIn)
-                  0.09    0.00    3.13 v i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/S0 (MUX2X2)
-  4310   13.50   61.80   42.79   45.92 ^ i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/Y (MUX2X2)
-                 61.80    0.00   45.92 ^ i_croc_soc/i_croc/all_periph_obi_rsp_316__reg/RB (DFFRQX3)
-                                 45.92   data arrival time
+                  0.04    0.00    3.13 v i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/S0 (MUX2X2)
+  4310   13.50   61.80   42.77   45.90 ^ i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/Y (MUX2X2)
+                  3.20    0.00   45.90 ^ i_croc_soc/i_croc/all_periph_obi_rsp_316__reg/RB (DFFRQX3)
+                                 45.90   data arrival time
 
                          10.00   10.00   max_delay
                          -0.10    9.90   clock uncertainty
                           0.00    9.90   clock reconvergence pessimism
-                        -37.17  -27.27   library recovery time
-                                -27.27   data required time
+                         -1.68    8.22   library recovery time
+                                  8.22   data required time
 -----------------------------------------------------------------------------
-                                -27.27   data required time
-                                -45.92   data arrival time
+                                  8.22   data required time
+                                -45.90   data arrival time
 -----------------------------------------------------------------------------
-                                -73.19   slack (VIOLATED)
+                                -37.68   slack (VIOLATED)
 
 
 
@@ -285,7 +285,7 @@ Fanout     Cap    Slew   Delay    Time   Description
      2    0.00    0.04    0.34    0.34 ^ i_croc_soc/i_rstgen.i_rstgen_bypass.synch_regs_q_3__reg/Q (DFFRQX3)
                   0.04    0.00    0.34 ^ i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/A0 (MUX2X2)
   4310   13.50   61.80   42.75   43.09 ^ i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/Y (MUX2X2)
-                 61.80    0.00   43.09 ^ i_croc_soc/i_croc/all_periph_obi_rsp_316__reg/RB (DFFRQX3)
+                  3.20    0.00   43.09 ^ i_croc_soc/i_croc/all_periph_obi_rsp_316__reg/RB (DFFRQX3)
                                  43.09   data arrival time
 
                   0.20   10.00   10.00   clock clk_sys (rise edge)
@@ -293,18 +293,18 @@ Fanout     Cap    Slew   Delay    Time   Description
                          -0.10    9.90   clock uncertainty
                           0.00    9.90   clock reconvergence pessimism
                                   9.90 ^ i_croc_soc/i_croc/all_periph_obi_rsp_316__reg/CK (DFFRQX3)
-                        -37.17  -27.27   library recovery time
-                                -27.27   data required time
+                         -1.68    8.22   library recovery time
+                                  8.22   data required time
 -----------------------------------------------------------------------------
-                                -27.27   data required time
+                                  8.22   data required time
                                 -43.09   data arrival time
 -----------------------------------------------------------------------------
-                                -70.36   slack (VIOLATED)
+                                -34.86   slack (VIOLATED)
 
 
 Startpoint: i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/async_ack_o_reg
             (rising edge-triggered flip-flop clocked by clk_sys)
-Endpoint: i_croc_soc/i_croc/i_dm_top.i_dm_top/i_dm_csrs.progbuf_o_194__reg
+Endpoint: i_croc_soc/i_croc/i_dm_top.i_dm_top/master_add_o[24]_reg
           (rising edge-triggered flip-flop clocked by clk_sys)
 Path Group: path delay
 Path Type: max
@@ -313,34 +313,34 @@ Corner: tt
 Fanout     Cap    Slew   Delay    Time   Description
 -----------------------------------------------------------------------------
                   0.20    0.00    0.00 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/async_ack_o_reg/CK (DFFRQX3)
-    88    0.15    0.53    0.70    0.70 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/async_ack_o_reg/Q (DFFRQX3)
-                  0.53    0.00    0.70 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/_300_/B (XOR2X2)
-     1    0.00    0.11    0.25    0.95 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/_300_/Y (XOR2X2)
-                  0.11    0.00    0.95 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/_0_/AB (NOR2BX1)
-    11    0.02    0.38    0.35    1.30 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/_0_/Y (NOR2BX1)
-                  0.38    0.00    1.30 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_3382_/A (AND3X2)
-    14    0.03    0.16    0.37    1.66 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_3382_/Y (AND3X2)
-                  0.16    0.00    1.66 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_3797_/A (NAND2X3)
-     6    0.01    0.09    0.12    1.78 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_3797_/Y (NAND2X3)
-                  0.09    0.00    1.78 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5259_/A (OAI21X2)
-     8    0.03    0.30    0.26    2.05 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5259_/Y (OAI21X2)
-                  0.30    0.00    2.05 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5546_/D (AOAI211X2)
-    64    0.11    1.03    0.90    2.95 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5546_/Y (AOAI211X2)
-                  1.03    0.00    2.95 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5557_/C (NOR3BX1)
-     1    0.00    0.22    0.26    3.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5557_/Y (NOR3BX1)
-                  0.22    0.00    3.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5558_/C (AO21X2)
-     1    0.00    0.06    0.16    3.36 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5558_/Y (AO21X2)
-                  0.06    0.00    3.36 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/i_dm_csrs.progbuf_o_194__reg/D (DFFRQX3)
-                                  3.36   data arrival time
+     6    0.01    0.08    0.38    0.38 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/async_ack_o_reg/Q (DFFRQX3)
+                  0.08    0.00    0.38 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/_152_/A (XOR2X1)
+     1    0.00    0.08    0.11    0.48 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/i_dst/_152_/Y (XOR2X1)
+                  0.08    0.00    0.48 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/_1_/AB (NOR2BX1)
+     9    0.02    0.35    0.31    0.79 ^ i_croc_soc/i_croc/i_dmi_jtag/i_dmi_cdc.i_cdc_req/_1_/Y (NOR2BX1)
+                  0.35    0.00    0.79 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_3545_/A (NAND2X3)
+     8    0.02    0.14    0.20    0.99 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_3545_/Y (NAND2X3)
+                  0.14    0.00    0.99 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_3546_/B (NOR2X4)
+    16    0.04    0.21    0.21    1.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_3546_/Y (NOR2X4)
+                  0.21    0.00    1.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5611_/A (NAND3X1)
+    48    0.08    1.64    1.34    2.54 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5611_/Y (NAND3X1)
+                  1.64    0.00    2.54 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5678_/A (INVX1)
+    14    0.02    0.52    0.66    3.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5678_/Y (INVX1)
+                  0.52    0.00    3.20 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5719_/A (NOR2X1)
+     1    0.00    0.11    0.13    3.33 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5719_/Y (NOR2X1)
+                  0.11    0.00    3.33 v i_croc_soc/i_croc/i_dm_top.i_dm_top/_5720_/C (AOI211X1)
+     1    0.00    0.25    0.14    3.47 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/_5720_/Y (AOI211X1)
+                  0.25    0.00    3.47 ^ i_croc_soc/i_croc/i_dm_top.i_dm_top/master_add_o[24]_reg/D (DFFRQX3)
+                                  3.47   data arrival time
 
                           3.00    3.00   max_delay
-                         -0.09    2.91   library setup time
-                                  2.91   data required time
+                         -0.13    2.87   library setup time
+                                  2.87   data required time
 -----------------------------------------------------------------------------
-                                  2.91   data required time
-                                 -3.36   data arrival time
+                                  2.87   data required time
+                                 -3.47   data arrival time
 -----------------------------------------------------------------------------
-                                 -0.45   slack (VIOLATED)
+                                 -0.60   slack (VIOLATED)
 
 
 Startpoint: i_croc_soc/i_croc/i_dmi_jtag/td_o_reg
@@ -387,21 +387,21 @@ Fanout     Cap    Slew   Delay    Time   Description
      2    0.23    0.49    0.03    2.53 v testmode_i (in)
                   0.49    0.00    2.53 v pad_testmode_i/pad (sg13cmos5l_IOPadIn)
      4    0.01    0.12    0.60    3.13 v pad_testmode_i/p2c (sg13cmos5l_IOPadIn)
-                  0.09    0.00    3.13 v i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/S0 (MUX2X2)
-  4310   13.50   61.80   42.79   45.92 ^ i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/Y (MUX2X2)
-                 61.80    0.00   45.92 ^ i_croc_soc/i_croc/all_periph_obi_rsp_316__reg/RB (DFFRQX3)
-                                 45.92   data arrival time
+                  0.04    0.00    3.13 v i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/S0 (MUX2X2)
+  4310   13.50   61.80   42.77   45.90 ^ i_croc_soc/i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no/i_mux/Y (MUX2X2)
+                  3.20    0.00   45.90 ^ i_croc_soc/i_croc/all_periph_obi_rsp_316__reg/RB (DFFRQX3)
+                                 45.90   data arrival time
 
                          10.00   10.00   max_delay
                          -0.10    9.90   clock uncertainty
                           0.00    9.90   clock reconvergence pessimism
-                        -37.17  -27.27   library recovery time
-                                -27.27   data required time
+                         -1.68    8.22   library recovery time
+                                  8.22   data required time
 -----------------------------------------------------------------------------
-                                -27.27   data required time
-                                -45.92   data arrival time
+                                  8.22   data required time
+                                -45.90   data arrival time
 -----------------------------------------------------------------------------
-                                -73.19   slack (VIOLATED)
+                                -37.68   slack (VIOLATED)
 
 
 
@@ -457,42 +457,42 @@ Fanout     Cap    Slew   Delay    Time   Description
 ==========================================================================
 02-02_croc.gpl1 max_slew_violation_count
 --------------------------------------------------------------------------
-max slew violation count 4446
+max slew violation count 74
 
 ==========================================================================
 02-02_croc.gpl1 max_fanout_violation_count
 --------------------------------------------------------------------------
-max fanout violation count 433
+max fanout violation count 401
 
 ==========================================================================
 02-02_croc.gpl1 max_cap_violation_count
 --------------------------------------------------------------------------
-max cap violation count 100
+max cap violation count 103
 
 ==========================================================================
 02-02_croc.gpl1 setup_violation_count
 --------------------------------------------------------------------------
-setup violation count 5519
+setup violation count 5390
 
 ==========================================================================
 02-02_croc.gpl1 hold_violation_count
 --------------------------------------------------------------------------
-hold violation count 75
+hold violation count 78
 
 ==========================================================================
 02-02_croc.gpl1 critical path delay
 --------------------------------------------------------------------------
-45.9231
+45.9047
 
 ==========================================================================
 02-02_croc.gpl1 critical path slack
 --------------------------------------------------------------------------
--73.1924
+-37.6826
 
 ==========================================================================
 02-02_croc.gpl1 slack div critical path delay
 --------------------------------------------------------------------------
--159.380355
+-82.088762
 
 ==========================================================================
 02-02_croc.gpl1 report_power tt
@@ -500,14 +500,14 @@ hold violation count 75
 Group                  Internal  Switching    Leakage      Total
                           Power      Power      Power      Power (Watts)
 ----------------------------------------------------------------
-Sequential             6.76e-03   3.30e-05   1.35e-06   6.80e-03  59.6%
-Combinational          8.32e-05   2.53e-04   1.75e-06   3.38e-04   3.0%
+Sequential             7.16e-03   9.36e-05   1.33e-06   7.26e-03  58.1%
+Combinational          2.24e-04   3.48e-04   1.70e-06   5.73e-04   4.6%
 Clock                  6.74e-07   2.88e-07   1.79e-10   9.62e-07   0.0%
-Macro                  3.33e-04   0.00e+00   3.96e-07   3.33e-04   2.9%
-Pad                    2.31e-04   3.71e-03   1.08e-07   3.94e-03  34.5%
+Macro                  6.46e-05   0.00e+00   3.96e-07   6.50e-05   0.5%
+Pad                    2.81e-04   4.31e-03   1.08e-07   4.59e-03  36.8%
 ----------------------------------------------------------------
-Total                  7.41e-03   4.00e-03   3.60e-06   1.14e-02 100.0%
-                          64.9%      35.0%       0.0%
+Total                  7.73e-03   4.75e-03   3.53e-06   1.25e-02 100.0%
+                          61.9%      38.1%       0.0%
 
 ==========================================================================
 02-02_croc.gpl1 report_design_area
@@ -522,11 +522,11 @@ Design Area Summary
 --------------------------------------------------------------------------------
 Die Area:              4629056.0 um2
 Core Area:             2200258.368 um2
-Total Area:            2226473.7664 um2
-Total Active Area:     583753.7664000001 um2
+Total Area:            2224241.248 um2
+Total Active Area:     581521.248 um2
 
-Core Utilization:      0.2653114629127047
-Std Cell Utilization:  0.20791361704330336
+Core Utilization:      0.2642968009836925
+Std Cell Utilization:  0.20681968423136457
 
 --------------------------------------------------------------------------------
 Hierarchical Area Report
@@ -535,54 +535,54 @@ Hierarchical Area Report
                                                                                 ------------------------------------------------------------------------------- ------------------------------------------------------------------------------- ------------------------------------------------------------------------------- ----------------------------------------------------------------------------
 Hierarchy Name                                                                  Total           StdCell         Macro           Cover           Pad             Total           StdCell         Macro           Cover           Pad             Total           StdCell         Macro           Cover           Pad             Total           StdCell         Macro           Cover           Pad             
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-<top>                                                                           2226473.766     424313.971      159439.795      313600.000      1329120.000     42202           41882           2               64              254             1679243.267     36523.267       0.000           313600.000      1329120.000     8945            8627            0               64              254             
-  i_croc_soc                                                                    547230.499      387790.704      159439.795      0.000           0.000           33257           33255           2               0               0               117.130         117.130         0.000           0.000           0.000           5               5               0               0               0               
-    i_croc                                                                      475311.514      315871.718      159439.795      0.000           0.000           25672           25670           2               0               0               31215.744       31215.744       0.000           0.000           0.000           3701            3701            0               0               0               
+<top>                                                                           2224241.248     422081.453      159439.795      313600.000      1329120.000     41960           41636           2               64              258             1683606.698     40886.698       0.000           313600.000      1329120.000     9722            9400            0               64              258             
+  i_croc_soc                                                                    540634.550      381194.755      159439.795      0.000           0.000           32238           32236           2               0               0               117.130         117.130         0.000           0.000           0.000           5               5               0               0               0               
+    i_croc                                                                      469725.984      310286.189      159439.795      0.000           0.000           24856           24854           2               0               0               30345.034       30345.034       0.000           0.000           0.000           3592            3592            0               0               0               
       gen_sram_bank\[0\].i_sram                                                 80054.352       334.454         79719.898       0.000           0.000           80              79              1               0               0               80054.352       334.454         79719.898       0.000           0.000           80              79              1               0               0               
       gen_sram_bank\[1\].i_sram                                                 80054.352       334.454         79719.898       0.000           0.000           80              79              1               0               0               80054.352       334.454         79719.898       0.000           0.000           80              79              1               0               0               
-      i_bootrom                                                                 3108.874        3108.874        0.000           0.000           0.000           343             343             0               0               0               3108.874        3108.874        0.000           0.000           0.000           343             343             0               0               0               
-      i_clint                                                                   9771.149        9771.149        0.000           0.000           0.000           718             718             0               0               0               9714.701        9714.701        0.000           0.000           0.000           716             716             0               0               0               
+      i_bootrom                                                                 2740.550        2740.550        0.000           0.000           0.000           302             302             0               0               0               2740.550        2740.550        0.000           0.000           0.000           302             302             0               0               0               
+      i_clint                                                                   9879.811        9879.811        0.000           0.000           0.000           719             719             0               0               0               9823.363        9823.363        0.000           0.000           0.000           717             717             0               0               0               
         i_sync                                                                  56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
-      i_core_wrap                                                               141190.560      141190.560      0.000           0.000           0.000           10924           10924           0               0               0               46105.315       46105.315       0.000           0.000           0.000           4376            4376            0               0               0               
-        i_core.cs_registers_i                                                   35114.890       35114.890       0.000           0.000           0.000           2963            2963            0               0               0               35114.890       35114.890       0.000           0.000           0.000           2963            2963            0               0               0               
-        i_core.register_file_i                                                  59970.355       59970.355       0.000           0.000           0.000           3585            3585            0               0               0               59970.355       59970.355       0.000           0.000           0.000           3585            3585            0               0               0               
-      i_dm_top.i_dm_top                                                         47849.558       47849.558       0.000           0.000           0.000           3925            3925            0               0               0               47849.558       47849.558       0.000           0.000           0.000           3925            3925            0               0               0               
-      i_dmi_jtag                                                                26040.874       26040.874       0.000           0.000           0.000           2088            2088            0               0               0               10434.413       10434.413       0.000           0.000           0.000           796             796             0               0               0               
-        i_dmi_cdc.i_cdc_req                                                     8249.875        8249.875        0.000           0.000           0.000           683             683             0               0               0               141.120         141.120         0.000           0.000           0.000           8               8               0               0               0               
-          i_cdc_reset_ctrlr                                                     2372.227        2372.227        0.000           0.000           0.000           203             203             0               0               0               0.000           0.000           0.000           0.000           0.000           0               0               0               0               0               
-            i_cdc_reset_ctrlr_half_a                                            1183.997        1183.997        0.000           0.000           0.000           101             101             0               0               0               659.030         659.030         0.000           0.000           0.000           67              67              0               0               0               
+      i_core_wrap                                                               139698.922      139698.922      0.000           0.000           0.000           10607           10607           0               0               0               45348.912       45348.912       0.000           0.000           0.000           4260            4260            0               0               0               
+        i_core.cs_registers_i                                                   34609.680       34609.680       0.000           0.000           0.000           2826            2826            0               0               0               34609.680       34609.680       0.000           0.000           0.000           2826            2826            0               0               0               
+        i_core.register_file_i                                                  59740.330       59740.330       0.000           0.000           0.000           3521            3521            0               0               0               59740.330       59740.330       0.000           0.000           0.000           3521            3521            0               0               0               
+      i_dm_top.i_dm_top                                                         47753.597       47753.597       0.000           0.000           0.000           3950            3950            0               0               0               47753.597       47753.597       0.000           0.000           0.000           3950            3950            0               0               0               
+      i_dmi_jtag                                                                23349.715       23349.715       0.000           0.000           0.000           1745            1745            0               0               0               10452.758       10452.758       0.000           0.000           0.000           843             843             0               0               0               
+        i_dmi_cdc.i_cdc_req                                                     6779.405        6779.405        0.000           0.000           0.000           470             470             0               0               0               141.120         141.120         0.000           0.000           0.000           8               8               0               0               0               
+          i_cdc_reset_ctrlr                                                     2346.826        2346.826        0.000           0.000           0.000           195             195             0               0               0               0.000           0.000           0.000           0.000           0.000           0               0               0               0               0               
+            i_cdc_reset_ctrlr_half_a                                            1171.296        1171.296        0.000           0.000           0.000           97              97              0               0               0               640.685         640.685         0.000           0.000           0.000           62              62              0               0               0               
               i_state_transition_cdc_dst                                        198.979         198.979         0.000           0.000           0.000           13              13              0               0               0               142.531         142.531         0.000           0.000           0.000           11              11              0               0               0               
                 i_sync                                                          56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
-              i_state_transition_cdc_src                                        325.987         325.987         0.000           0.000           0.000           21              21              0               0               0               269.539         269.539         0.000           0.000           0.000           19              19              0               0               0               
+              i_state_transition_cdc_src                                        331.632         331.632         0.000           0.000           0.000           22              22              0               0               0               275.184         275.184         0.000           0.000           0.000           20              20              0               0               0               
                 i_sync                                                          56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
-            i_cdc_reset_ctrlr_half_b                                            1188.230        1188.230        0.000           0.000           0.000           102             102             0               0               0               663.264         663.264         0.000           0.000           0.000           68              68              0               0               0               
+            i_cdc_reset_ctrlr_half_b                                            1175.530        1175.530        0.000           0.000           0.000           98              98              0               0               0               644.918         644.918         0.000           0.000           0.000           63              63              0               0               0               
               i_state_transition_cdc_dst                                        198.979         198.979         0.000           0.000           0.000           13              13              0               0               0               142.531         142.531         0.000           0.000           0.000           11              11              0               0               0               
                 i_sync                                                          56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
-              i_state_transition_cdc_src                                        325.987         325.987         0.000           0.000           0.000           21              21              0               0               0               269.539         269.539         0.000           0.000           0.000           19              19              0               0               0               
+              i_state_transition_cdc_src                                        331.632         331.632         0.000           0.000           0.000           22              22              0               0               0               275.184         275.184         0.000           0.000           0.000           20              20              0               0               0               
                 i_sync                                                          56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
-          i_dst                                                                 3607.027        3607.027        0.000           0.000           0.000           340             340             0               0               0               3522.355        3522.355        0.000           0.000           0.000           337             337             0               0               0               
+          i_dst                                                                 2167.603        2167.603        0.000           0.000           0.000           135             135             0               0               0               2082.931        2082.931        0.000           0.000           0.000           132             132             0               0               0               
             i_sync                                                              84.672          84.672          0.000           0.000           0.000           3               3               0               0               0               84.672          84.672          0.000           0.000           0.000           3               3               0               0               0               
-          i_src                                                                 2129.501        2129.501        0.000           0.000           0.000           132             132             0               0               0               2044.829        2044.829        0.000           0.000           0.000           129             129             0               0               0               
+          i_src                                                                 2123.856        2123.856        0.000           0.000           0.000           132             132             0               0               0               2039.184        2039.184        0.000           0.000           0.000           129             129             0               0               0               
             i_sync                                                              84.672          84.672          0.000           0.000           0.000           3               3               0               0               0               84.672          84.672          0.000           0.000           0.000           3               3               0               0               0               
-        i_dmi_cdc.i_cdc_resp                                                    7339.651        7339.651        0.000           0.000           0.000           607             607             0               0               0               145.354         145.354         0.000           0.000           0.000           9               9               0               0               0               
-          i_cdc_reset_ctrlr                                                     2372.227        2372.227        0.000           0.000           0.000           203             203             0               0               0               0.000           0.000           0.000           0.000           0.000           0               0               0               0               0               
-            i_cdc_reset_ctrlr_half_a                                            1188.230        1188.230        0.000           0.000           0.000           102             102             0               0               0               663.264         663.264         0.000           0.000           0.000           68              68              0               0               0               
+        i_dmi_cdc.i_cdc_resp                                                    6100.618        6100.618        0.000           0.000           0.000           430             430             0               0               0               145.354         145.354         0.000           0.000           0.000           9               9               0               0               0               
+          i_cdc_reset_ctrlr                                                     2334.125        2334.125        0.000           0.000           0.000           196             196             0               0               0               0.000           0.000           0.000           0.000           0.000           0               0               0               0               0               
+            i_cdc_reset_ctrlr_half_a                                            1162.829        1162.829        0.000           0.000           0.000           99              99              0               0               0               632.218         632.218         0.000           0.000           0.000           64              64              0               0               0               
               i_state_transition_cdc_dst                                        198.979         198.979         0.000           0.000           0.000           13              13              0               0               0               142.531         142.531         0.000           0.000           0.000           11              11              0               0               0               
                 i_sync                                                          56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
-              i_state_transition_cdc_src                                        325.987         325.987         0.000           0.000           0.000           21              21              0               0               0               269.539         269.539         0.000           0.000           0.000           19              19              0               0               0               
+              i_state_transition_cdc_src                                        331.632         331.632         0.000           0.000           0.000           22              22              0               0               0               275.184         275.184         0.000           0.000           0.000           20              20              0               0               0               
                 i_sync                                                          56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
-            i_cdc_reset_ctrlr_half_b                                            1183.997        1183.997        0.000           0.000           0.000           101             101             0               0               0               659.030         659.030         0.000           0.000           0.000           67              67              0               0               0               
+            i_cdc_reset_ctrlr_half_b                                            1171.296        1171.296        0.000           0.000           0.000           97              97              0               0               0               640.685         640.685         0.000           0.000           0.000           62              62              0               0               0               
               i_state_transition_cdc_dst                                        198.979         198.979         0.000           0.000           0.000           13              13              0               0               0               142.531         142.531         0.000           0.000           0.000           11              11              0               0               0               
                 i_sync                                                          56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
-              i_state_transition_cdc_src                                        325.987         325.987         0.000           0.000           0.000           21              21              0               0               0               269.539         269.539         0.000           0.000           0.000           19              19              0               0               0               
+              i_state_transition_cdc_src                                        331.632         331.632         0.000           0.000           0.000           22              22              0               0               0               275.184         275.184         0.000           0.000           0.000           20              20              0               0               0               
                 i_sync                                                          56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
-          i_dst                                                                 3028.435        3028.435        0.000           0.000           0.000           284             284             0               0               0               2943.763        2943.763        0.000           0.000           0.000           281             281             0               0               0               
+          i_dst                                                                 1833.149        1833.149        0.000           0.000           0.000           114             114             0               0               0               1748.477        1748.477        0.000           0.000           0.000           111             111             0               0               0               
             i_sync                                                              84.672          84.672          0.000           0.000           0.000           3               3               0               0               0               84.672          84.672          0.000           0.000           0.000           3               3               0               0               0               
-          i_src                                                                 1793.635        1793.635        0.000           0.000           0.000           111             111             0               0               0               1708.963        1708.963        0.000           0.000           0.000           108             108             0               0               0               
+          i_src                                                                 1787.990        1787.990        0.000           0.000           0.000           111             111             0               0               0               1703.318        1703.318        0.000           0.000           0.000           108             108             0               0               0               
             i_sync                                                              84.672          84.672          0.000           0.000           0.000           3               3               0               0               0               84.672          84.672          0.000           0.000           0.000           3               3               0               0               0               
         i_dmi_jtag_tap.i_dft_tck_mux                                            12.701          12.701          0.000           0.000           0.000           1               1               0               0               0               12.701          12.701          0.000           0.000           0.000           1               1               0               0               0               
         i_dmi_jtag_tap.i_tck_inv                                                4.234           4.234           0.000           0.000           0.000           1               1               0               0               0               4.234           4.234           0.000           0.000           0.000           1               1               0               0               0               
-      i_gpio                                                                    16996.493       16996.493       0.000           0.000           0.000           1203            1203            0               0               0               15190.157       15190.157       0.000           0.000           0.000           1139            1139            0               0               0               
+      i_gpio                                                                    17026.128       17026.128       0.000           0.000           0.000           1224            1224            0               0               0               15219.792       15219.792       0.000           0.000           0.000           1160            1160            0               0               0               
         gen_gpios\[0\].i_sync                                                   56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
         gen_gpios\[10\].i_sync                                                  56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
         gen_gpios\[11\].i_sync                                                  56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
@@ -615,9 +615,9 @@ Hierarchy Name                                                                  
         gen_gpios\[7\].i_sync                                                   56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
         gen_gpios\[8\].i_sync                                                   56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
         gen_gpios\[9\].i_sync                                                   56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               56.448          56.448          0.000           0.000           0.000           2               2               0               0               0               
-      i_obi_timer                                                               6706.022        6706.022        0.000           0.000           0.000           510             510             0               0               0               6706.022        6706.022        0.000           0.000           0.000           510             510             0               0               0               
-      i_soc_ctrl                                                                4047.322        4047.322        0.000           0.000           0.000           283             283             0               0               0               4047.322        4047.322        0.000           0.000           0.000           283             283             0               0               0               
-      i_uart                                                                    28276.214       28276.214       0.000           0.000           0.000           1817            1817            0               0               0               27977.040       27977.040       0.000           0.000           0.000           1803            1803            0               0               0               
+      i_obi_timer                                                               6691.910        6691.910        0.000           0.000           0.000           505             505             0               0               0               6691.910        6691.910        0.000           0.000           0.000           505             505             0               0               0               
+      i_soc_ctrl                                                                4067.078        4067.078        0.000           0.000           0.000           280             280             0               0               0               4067.078        4067.078        0.000           0.000           0.000           280             280             0               0               0               
+      i_uart                                                                    28064.534       28064.534       0.000           0.000           0.000           1772            1772            0               0               0               27765.360       27765.360       0.000           0.000           0.000           1758            1758            0               0               0               
         i_uart_modem.i_sync_cd                                                  60.682          60.682          0.000           0.000           0.000           3               3               0               0               0               60.682          60.682          0.000           0.000           0.000           3               3               0               0               0               
         i_uart_modem.i_sync_cts                                                 60.682          60.682          0.000           0.000           0.000           3               3               0               0               0               60.682          60.682          0.000           0.000           0.000           3               3               0               0               0               
         i_uart_modem.i_sync_dsr                                                 60.682          60.682          0.000           0.000           0.000           3               3               0               0               0               60.682          60.682          0.000           0.000           0.000           3               3               0               0               0               
@@ -626,4 +626,4 @@ Hierarchy Name                                                                  
     i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_init_no                              16.934          16.934          0.000           0.000           0.000           2               2               0               0               0               16.934          16.934          0.000           0.000           0.000           2               2               0               0               0               
     i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_n                                12.701          12.701          0.000           0.000           0.000           1               1               0               0               0               12.701          12.701          0.000           0.000           0.000           1               1               0               0               0               
     i_rstgen.i_rstgen_bypass.i_tc_clk_mux2_rst_no                               12.701          12.701          0.000           0.000           0.000           1               1               0               0               0               12.701          12.701          0.000           0.000           0.000           1               1               0               0               0               
-    i_user                                                                      71759.520       71759.520       0.000           0.000           0.000           7576            7576            0               0               0               71759.520       71759.520       0.000           0.000           0.000           7576            7576            0               0               0               
+    i_user                                                                      70749.101       70749.101       0.000           0.000           0.000           7373            7373            0               0               0               70749.101       70749.101       0.000           0.000           0.000           7373            7373            0               0               0               

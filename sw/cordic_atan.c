@@ -169,11 +169,11 @@ int main(int argc, char **argv)
   printf("Total number of mismatches: 0x%x\n", mismatch_counter);
 
   // (can differ due to printf bug for large arrays)
-  printf("SOFTWARE AND HARDWARE RESULTS (can differ due to printf bug for large arrays)\n");
-  for (int i = 0; i < length/2; i++) {
-    printf("SW:: Index: [0x%x], Input: 0x%x/0x%x, Output: 0x%x\n", i, (unsigned int)(uint16_t)source_array[2*i+1], (unsigned int)(uint16_t)source_array[2*i], (unsigned int)(uint16_t)destination_array_SW[i]);
-    printf("HW:: Index: [0x%x], Input: 0x%x/0x%x, Output: 0x%x\n", i, (unsigned int)(uint16_t)source_array[2*i+1], (unsigned int)(uint16_t)source_array[2*i], (unsigned int)(uint16_t)destination_array_HW[i]);
-  }
+  // printf("SOFTWARE AND HARDWARE RESULTS (can differ due to printf bug for large arrays)\n");
+  // for (int i = 0; i < length/2; i++) {
+  //   printf("SW:: Index: [0x%x], Input: 0x%x/0x%x, Output: 0x%x\n", i, (unsigned int)(uint16_t)source_array[2*i+1], (unsigned int)(uint16_t)source_array[2*i], (unsigned int)(uint16_t)destination_array_SW[i]);
+  //   printf("HW:: Index: [0x%x], Input: 0x%x/0x%x, Output: 0x%x\n", i, (unsigned int)(uint16_t)source_array[2*i+1], (unsigned int)(uint16_t)source_array[2*i], (unsigned int)(uint16_t)destination_array_HW[i]);
+  // }
 
 
   uart_write_flush();

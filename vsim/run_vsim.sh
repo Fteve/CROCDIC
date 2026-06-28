@@ -161,6 +161,7 @@ compile_netlist() {
 }
 
 
+# Add -voptargs=+acc for VCD dump file
 run_vsim() {
     run_cmd "${VSIM} \
         +binary=$1 \

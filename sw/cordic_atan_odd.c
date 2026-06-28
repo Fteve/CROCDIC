@@ -63,11 +63,24 @@ integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 
 // source array of values in Q2.14 format format to be computed
 // For ATAN, organized in (x1,y1) pairs
-integer source_array[126] = {0, 1000, 0, 2000, 0, 3000, 0, 4000, 0, 5000, 0, 6000, 0, 7000, 1000, 0, 1000, 1000, 1000, 2000, 1000, 3000, 1000, 4000, 1000, 5000, 1000, 6000, 1000, 7000, 2000, 0, 2000, 1000, 2000, 2000, 2000, 3000, 2000, 4000, 2000, 5000, 2000, 6000, 2000, 7000, 3000, 0, 3000, 1000, 3000, 2000, 3000, 3000, 3000, 4000, 3000, 5000, 3000, 6000, 3000, 7000, 4000, 0, 4000, 1000, 4000, 2000, 4000, 3000, 4000, 4000, 4000, 5000, 4000, 6000, 4000, 7000, 5000, 0, 5000, 1000, 5000, 2000, 5000, 3000, 5000, 4000, 5000, 5000, 5000, 6000, 5000, 7000, 6000, 0, 6000, 1000, 6000, 2000, 6000, 3000, 6000, 4000, 6000, 5000, 6000, 6000, 6000, 7000, 7000, 0, 7000, 1000, 7000, 2000, 7000, 3000, 7000, 4000, 7000, 5000, 7000, 6000, 7000, 7000};
+integer source_array[128] = {0, 0, 0, 1000, 0, 2000, 0, 3000, 0, 4000, 0, 5000, 0, 6000, 0, 7000, 1000, 0, 1000, 1000, 1000, 2000, 1000, 3000, 1000, 4000, 1000, 5000, 1000, 6000, 1000, 7000, 2000, 0, 2000, 1000, 2000, 2000, 2000, 3000, 2000, 4000, 2000, 5000, 2000, 6000, 2000, 7000, 3000, 0, 3000, 1000, 3000, 2000, 3000, 3000, 3000, 4000, 3000, 5000, 3000, 6000, 3000, 7000, 4000, 0, 4000, 1000, 4000, 2000, 4000, 3000, 4000, 4000, 4000, 5000, 4000, 6000, 4000, 7000, 5000, 0, 5000, 1000, 5000, 2000, 5000, 3000, 5000, 4000, 5000, 5000, 5000, 6000, 5000, 7000, 6000, 0, 6000, 1000, 6000, 2000, 6000, 3000, 6000, 4000, 6000, 5000, 6000, 6000, 6000, 7000, 7000, 0, 7000, 1000, 7000, 2000, 7000, 3000, 7000, 4000, 7000, 5000, 7000, 6000, 7000, 7000};
 
 // destination array of values in Q2.14 format
-integer destination_array_SW[63];
-integer destination_array_HW[63];
+// initialize all array values to fixed value and check that last one wasn't modified
+integer destination_array_SW[64] = { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9 };
+integer destination_array_HW[64] = { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
+                         9, 9, 9, 9 };
 
 
 void cordic(integer direction, integer mode, integer xin, integer yin, integer zin, integer *xout, integer *yout, integer *zout)
@@ -108,7 +121,7 @@ int main(int argc, char **argv)
 {
   uart_init();
 
-  int length = sizeof(source_array) / sizeof(source_array[0]);
+  int length = (sizeof(source_array) / sizeof(source_array[0])) - 2;  // process one element pair less (check correct odd-element handling)
 
   // Timestamps
   uint32_t t0, t1, t2;
@@ -161,6 +174,15 @@ int main(int argc, char **argv)
 
       //while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
     }
+  }
+
+  // Check that last array element wasn't modified by the HW
+  if (destination_array_HW[63] != 9)
+  {
+    mismatch_counter++;
+    printf("!!MISMATCH BETWEEN SW AND HW RESULT at index position 63!!\n");
+
+    // while(1);  // optional: use this so you definitely notice that something is wrong (halt CPU)
   }
 
   // Report result summary

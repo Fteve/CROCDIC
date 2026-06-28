@@ -62,7 +62,7 @@ integer gmode; // {0: CIRCULAR, 1: LINEAR, 2: HYPERBOLIC}
 
 
 // source array of values in Q2.14 format to be computed
-integer source_array[50] =  {0, 514, 1029, 1544, 2058, 2573, 3088, 3603, 4117, 4632, 5147, 5661, 6176, 6691, 7206, 7720, 8235, 8750, 9264, 9779, 10294, 10809, 11323, 11838, 12353, 12867, 13382, 13897, 14412, 14926, 15441, 15956, 16470, 16985, 17500, 18015, 18529, 19044, 19559, 20074, 20588, 21103, 21618, 22132, 22647, 23162, 23677, 24191, 24706, 25221};
+integer source_array[49] =  {514, 1029, 1544, 2058, 2573, 3088, 3603, 4117, 4632, 5147, 5661, 6176, 6691, 7206, 7720, 8235, 8750, 9264, 9779, 10294, 10809, 11323, 11838, 12353, 12867, 13382, 13897, 14412, 14926, 15441, 15956, 16470, 16985, 17500, 18015, 18529, 19044, 19559, 20074, 20588, 21103, 21618, 22132, 22647, 23162, 23677, 24191, 24706, 25221};
 
 // destination array of values in Q2.14 format
 // initialize all array values to fixed value and check that last one wasn't modified
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 {
   uart_init();
 
-  int length = (sizeof(source_array) / sizeof(source_array[0])) - 1; // process one element less (check correct odd-element handling)
+  int length = sizeof(source_array) / sizeof(source_array[0]);
 
   // Timestamps
   uint32_t t0, t1, t2;
